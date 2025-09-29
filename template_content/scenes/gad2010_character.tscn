@@ -1,0 +1,148 @@
+[gd_scene load_steps=18 format=3 uid="uid://dej5e01xpode"]
+
+[ext_resource type="Script" uid="uid://cxl1ep0n2uhxa" path="res://template_content/scripts/gad2010_character.gd" id="1_ul16g"]
+[ext_resource type="Shader" uid="uid://df3dyckjcl2od" path="res://template_content/interaction_highlight.tres" id="2_anvoh"]
+[ext_resource type="Texture2D" uid="uid://de22e3xpof34u" path="res://template_content/sprites/gad2010_character.png" id="3_1i50q"]
+[ext_resource type="Script" uid="uid://cmgy5tw8nlv8q" path="res://addons/gad2010interaction/core/interactor_2d.gd" id="4_6cdsv"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_j486k"]
+shader = ExtResource("2_anvoh")
+shader_parameter/HighlightColour = Color(0, 0.433333, 1, 1)
+shader_parameter/BandFrequency = 50.0
+shader_parameter/Speed = 5.0
+shader_parameter/Power = 0.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0l15n"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(128, 384, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdy0q"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vui2q"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(128, 256, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fevst"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(0, 384, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_770bi"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(128, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dbxmv"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(0, 128, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ul16g"]
+atlas = ExtResource("3_1i50q")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2m01s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0l15n")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdy0q")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vui2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fevst")
+}],
+"loop": true,
+"name": &"interact",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_770bi")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dbxmv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ul16g")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0he7g"]
+radius = 32.0
+height = 92.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tj1sm"]
+bg_color = Color(0.9, 0.9, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6xoin"]
+bg_color = Color(0.147754, 0.658548, 0.19062, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhjb1"]
+size = Vector2(86, 110)
+
+[node name="Gad2010Character" type="CharacterBody2D"]
+script = ExtResource("1_ul16g")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_j486k")
+position = Vector2(0, -64)
+sprite_frames = SubResource("SpriteFrames_2m01s")
+animation = &"walk"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -48)
+shape = SubResource("CapsuleShape2D_0he7g")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
+offset_left = -38.0
+offset_top = -126.0
+offset_right = 38.0
+offset_bottom = -116.0
+theme_override_styles/background = SubResource("StyleBoxFlat_tj1sm")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6xoin")
+max_value = 1.0
+show_percentage = false
+
+[node name="Interactor2D" type="Area2D" parent="." node_paths=PackedStringArray("instigator")]
+position = Vector2(0, -48)
+script = ExtResource("4_6cdsv")
+instigator = NodePath("..")
+metadata/_custom_type_script = "uid://cmgy5tw8nlv8q"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Interactor2D"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_uhjb1")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.1
+drag_top_margin = 0.1
+drag_right_margin = 0.1
+drag_bottom_margin = 0.1

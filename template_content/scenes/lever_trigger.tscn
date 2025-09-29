@@ -1,0 +1,54 @@
+[gd_scene load_steps=8 format=3 uid="uid://bovfhji2160lm"]
+
+[ext_resource type="Script" uid="uid://qh6nfn8d1emj" path="res://template_content/scripts/lever_trigger.gd" id="1_k8h4o"]
+[ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_qjiw8"]
+[ext_resource type="Script" uid="uid://d182ka7jx8rbo" path="res://addons/gad2010interaction/core/interaction.gd" id="3_16ygw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_37n2b"]
+size = Vector2(64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6ou7w"]
+atlas = ExtResource("2_qjiw8")
+region = Rect2(704, 512, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_37n2b"]
+atlas = ExtResource("2_qjiw8")
+region = Rect2(704, 448, 64, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0t01h"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6ou7w")
+}],
+"loop": true,
+"name": &"Off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_37n2b")
+}],
+"loop": true,
+"name": &"On",
+"speed": 5.0
+}]
+
+[node name="LeverTrigger" type="Area2D"]
+script = ExtResource("1_k8h4o")
+metadata/_custom_type_script = "uid://dexoxr3uco4vw"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_37n2b")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_0t01h")
+animation = &"On"
+offset = Vector2(0, -32)
+
+[node name="Interaction" type="Node" parent="."]
+script = ExtResource("3_16ygw")
+metadata/_custom_type_script = "uid://d182ka7jx8rbo"
+
+[connection signal="short_interaction" from="Interaction" to="." method="_on_short_interaction"]

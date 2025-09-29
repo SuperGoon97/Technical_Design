@@ -1,0 +1,29 @@
+[gd_scene load_steps=5 format=3 uid="uid://ugge72waq8s"]
+
+[ext_resource type="Script" uid="uid://c4h8jdka02frb" path="res://template_content/scripts/level_entry.gd" id="1_n4xb3"]
+[ext_resource type="Script" uid="uid://d182ka7jx8rbo" path="res://addons/gad2010interaction/core/interaction.gd" id="2_rp1qv"]
+[ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="3_f8spi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nph2c"]
+size = Vector2(64, 128)
+
+[node name="LevelEntry" type="Area2D"]
+z_index = -1
+script = ExtResource("1_n4xb3")
+level_path = "res://gym.tscn"
+metadata/_custom_type_script = "uid://dexoxr3uco4vw"
+
+[node name="Interaction" type="Node" parent="."]
+script = ExtResource("2_rp1qv")
+interaction_type = 1
+metadata/_custom_type_script = "uid://d182ka7jx8rbo"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nph2c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_f8spi")
+region_enabled = true
+region_rect = Rect2(960, 128, 64, 128)
+
+[connection signal="long_interaction" from="Interaction" to="." method="_on_long_interaction"]
