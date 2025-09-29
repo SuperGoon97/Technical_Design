@@ -1,9 +1,10 @@
-[gd_scene load_steps=18 format=4 uid="uid://d2qtipmylyqmn"]
+[gd_scene load_steps=19 format=4 uid="uid://d2qtipmylyqmn"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_wxsj8"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_gih8a"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_sun7n"]
 [ext_resource type="PackedScene" uid="uid://bovfhji2160lm" path="res://template_content/scenes/lever_trigger.tscn" id="4_06ylt"]
+[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://Scripts/advanced_camera_2d.gd" id="4_gasy2"]
 [ext_resource type="PackedScene" uid="uid://dj6b1edsqerva" path="res://template_content/scenes/long_press_button.tscn" id="5_gasy2"]
 [ext_resource type="PackedScene" uid="uid://yqk7wh0hc2ny" path="res://template_content/scenes/blocking_wall.tscn" id="5_gih8a"]
 [ext_resource type="Script" uid="uid://bmwmmkhvqu3g1" path="res://template_content/scripts/moving_floor.gd" id="6_maps3"]
@@ -481,6 +482,13 @@ position = Vector2(280, 0)
 texture = ExtResource("3_sun7n")
 region_enabled = true
 region_rect = Rect2(0, 0, 5120, 2560)
+
+[node name="AdvancedCamera2D" type="Camera2D" parent="Core" node_paths=PackedStringArray("camera_default_target")]
+script = ExtResource("4_gasy2")
+camera_default_target = NodePath("../Gad2010Character")
+camera_starting_follow_type = 1
+camera_default_speed = 1000.0
+metadata/_custom_type_script = "uid://crdiiqs5w1g4l"
 
 [node name="Labels" type="Node" parent="."]
 

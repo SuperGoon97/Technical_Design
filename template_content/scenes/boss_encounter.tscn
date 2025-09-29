@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=4 uid="uid://bdh5k7qeul5n6"]
+[gd_scene load_steps=7 format=4 uid="uid://bdh5k7qeul5n6"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_unjjx"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_fumtr"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_agx27"]
+[ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Nodes/advanced_camera_2d.tscn" id="4_y8acl"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_fumtr")
@@ -455,3 +456,8 @@ texture_repeat = 2
 texture = ExtResource("3_agx27")
 region_enabled = true
 region_rect = Rect2(0, 0, 5120, 2560)
+
+[node name="AdvancedCamera2D" parent="Core" node_paths=PackedStringArray("camera_default_target") instance=ExtResource("4_y8acl")]
+position = Vector2(-760, -748)
+camera_default_target = NodePath("../Gad2010Character")
+camera_starting_follow_type = 1

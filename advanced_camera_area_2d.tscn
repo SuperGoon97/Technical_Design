@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bh23fwbjwu1hp"]
+
+[ext_resource type="Script" uid="uid://d2b3rjbrvcags" path="res://advanced_camera_area_2d.gd" id="1_43nta"]
+[ext_resource type="Script" uid="uid://tlqiajq301bl" path="res://advanced_camera_node.gd" id="1_m7814"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mpjcl"]
+size = Vector2(86, 110)
+
+[node name="advanced_camera_area2D" type="Area2D"]
+collision_layer = 8
+collision_mask = 8
+script = ExtResource("1_43nta")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mpjcl")
+
+[node name="AdvancedCameraSignalsNode" type="Node" parent="."]
+script = ExtResource("1_m7814")
+metadata/_custom_type_script = "uid://tlqiajq301bl"
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

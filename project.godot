@@ -23,6 +23,10 @@ window/size/viewport_height=720
 
 enabled=PackedStringArray("res://addons/gad2010interaction/plugin.cfg")
 
+[global_group]
+
+AdvancedCamera2D="AdvancedCamera2D node"
+
 [input]
 
 ui_left={

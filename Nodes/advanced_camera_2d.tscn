@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://drxgbbvowyje4"]
+
+[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://Scripts/advanced_camera_2d.gd" id="1_cbslc"]
+
+[node name="AdvancedCamera2D" type="Camera2D" groups=["AdvancedCamera2D"]]
+script = ExtResource("1_cbslc")
