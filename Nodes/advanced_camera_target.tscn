@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://qqys3tfvvyt7"]
+
+[ext_resource type="Texture2D" uid="uid://cpbnvxjf5s1wa" path="res://advanced_camera.png" id="1_g8kgq"]
+[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Nodes/advanced_camera_target.gd" id="1_yyonb"]
+
+[node name="AdvancedCameraTarget" type="Node2D"]
+script = ExtResource("1_yyonb")
+
+[node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
+texture = ExtResource("1_g8kgq")

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bq0r0kbimchc4"
-path="res://.godot/imported/interactor.png-868b6b5219744c1e743344bc43f4b2c7.ctex"
+uid="uid://cpbnvxjf5s1wa"
+path="res://.godot/imported/advanced_camera.png-cf66bc19ed92baa90741fafed8e667fb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/gad2010interaction/icons/interactor.png"
-dest_files=["res://.godot/imported/interactor.png-868b6b5219744c1e743344bc43f4b2c7.ctex"]
+source_file="res://advanced_camera.png"
+dest_files=["res://.godot/imported/advanced_camera.png-cf66bc19ed92baa90741fafed8e667fb.ctex"]
 
 [params]
 
