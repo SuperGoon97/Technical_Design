@@ -1,10 +1,16 @@
-[gd_scene load_steps=3 format=3 uid="uid://qqys3tfvvyt7"]
+[gd_scene load_steps=4 format=3 uid="uid://qqys3tfvvyt7"]
 
-[ext_resource type="Texture2D" uid="uid://cpbnvxjf5s1wa" path="res://advanced_camera.png" id="1_g8kgq"]
 [ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Nodes/advanced_camera_target.gd" id="1_yyonb"]
+[ext_resource type="Texture2D" uid="uid://6snulgv258yr" path="res://advanced_camera_icon.png" id="2_8k4pp"]
+[ext_resource type="Script" uid="uid://gtj52bw056bm" path="res://Nodes/advanced_camera_target_sprite.gd" id="3_8k4pp"]
 
 [node name="AdvancedCameraTarget" type="Node2D"]
 script = ExtResource("1_yyonb")
+camera_zoom_at_target = null
 
 [node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
-texture = ExtResource("1_g8kgq")
+texture = ExtResource("2_8k4pp")
+script = ExtResource("3_8k4pp")
+
+[connection signal="draw_camera_icon_changed" from="." to="AdvancedCameraTargetSprite" method="_on_advanced_camera_target_draw_camera_icon_changed"]
+[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]

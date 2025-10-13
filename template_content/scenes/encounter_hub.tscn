@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://dvjgqdaecrw8v"]
+[gd_scene load_steps=11 format=4 uid="uid://dvjgqdaecrw8v"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://advanced_camera_area_2d.tscn" id="5_6x818"]
 [ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Nodes/advanced_camera_target.tscn" id="6_ljryr"]
+[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Nodes/advanced_camera_target.gd" id="7_ljryr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_cfhth")
@@ -459,20 +460,23 @@ texture_repeat = 2
 texture = ExtResource("3_2mkwc")
 region_enabled = true
 region_rect = Rect2(0, 0, 5120, 2560)
+metadata/_edit_lock_ = true
 
 [node name="AdvancedCamera2D" parent="Core" node_paths=PackedStringArray("camera_default_target") instance=ExtResource("4_lorlc")]
-position = Vector2(-382, -318)
+position = Vector2(368, -448)
+editor_draw_limits = true
 camera_default_target = NodePath("../Gad2010Character")
 camera_default_follow_type = 2
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
 position = Vector2(-67, -108)
-area_color = Color(0.6679158, 0.46783346, 0.5356279, 0.41960785)
+area_color = Color(0.667916, 0.467833, 0.535628, 0.419608)
 area_targets = [NodePath("AdvancedCameraTarget")]
 
-[node name="AdvancedCameraTarget" parent="Core/advanced_camera_area2D" instance=ExtResource("6_ljryr")]
-modulate = Color(0.6679158, 0.46783346, 0.5356279, 1)
-position = Vector2(672, -518)
+[node name="AdvancedCameraTarget" type="Node2D" parent="Core/advanced_camera_area2D" instance=ExtResource("6_ljryr")]
+modulate = Color(0.667916, 0.467833, 0.535628, 1)
+position = Vector2(1451, -684)
+script = ExtResource("7_ljryr")
 
 [node name="Labels" type="Node" parent="."]
 
@@ -485,6 +489,7 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center]Hold E to perform a long interaction while touching a door.[/center]"
+metadata/_edit_lock_ = true
 
 [node name="Label - Movement" type="RichTextLabel" parent="Labels"]
 offset_left = -576.0
@@ -495,6 +500,7 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/normal_font_size = 24
 bbcode_enabled = true
 text = "[center]WASD or Arrows to move.[/center]"
+metadata/_edit_lock_ = true
 
 [node name="LevelEntry(Gym)" parent="." instance=ExtResource("4_mtv41")]
 position = Vector2(384, 128)
@@ -505,6 +511,8 @@ position = Vector2(768, 128)
 level_path = "res://template_content/scenes/boss_encounter.tscn"
 
 [node name="advanced_camera_area2D" parent="." instance=ExtResource("5_6x818")]
-position = Vector2(209, -112)
+position = Vector2(72, 96)
 is_camera_release_area = true
-area_color = Color(0, 0.64503676, 0.27508205, 0.41960785)
+area_color = Color(0, 0.645037, 0.275082, 0.419608)
+
+[connection signal="draw_camera_icon_changed" from="Core/advanced_camera_area2D/AdvancedCameraTarget" to="Core/advanced_camera_area2D/AdvancedCameraTarget/AdvancedCameraTargetSprite" method="_on_advanced_camera_target_draw_camera_icon_changed"]

@@ -1,3 +1,4 @@
+@tool
 extends Node
 
 enum FOLLOW_TYPE{
@@ -21,6 +22,8 @@ var advanced_camera:AdvancedCamera2D:
 	get:
 		return advanced_camera
 
+var temp_advanced_camera:AdvancedCamera2D
+
 func set_camera_follow_type(type:FOLLOW_TYPE):
 	if advanced_camera:
 		advanced_camera.set("camera_follow_type",type)
@@ -43,7 +46,19 @@ func set_camera_target(target:Node2D):
 
 func get_camera_target():
 	if advanced_camera:
-		advanced_camera.get("camera_target")
+		return advanced_camera.get("camera_target")
+
+func get_camera_screen() -> Transform2D:
+	if advanced_camera:
+		return advanced_camera.get_screen_transform()
+	else:
+		return get_temp_advanced_cam().get_screen_transform()
+
+func get_camera_zoom():
+	if advanced_camera:
+		return advanced_camera.get("zoom")
+	else:
+		return get_temp_advanced_cam().zoom
 
 func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,_move_type:MOVE_TO_TYPE = MOVE_TO_TYPE.SNAP):
 	if advanced_camera:
@@ -54,3 +69,6 @@ func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,_move_
 func release_camera():
 	if advanced_camera:
 		advanced_camera.call("release_cam")
+
+func get_temp_advanced_cam():
+	return get_tree().get_first_node_in_group("AdvancedCamera2D")
