@@ -7,6 +7,8 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 @export_tool_button("Create Area Target","Callable") var create_target_action = create_target
 @export_tool_button("Remove Last Area Target","Callable") var remove_last_target_action = remove_last_target
 
+@export var is_camera_release_area:bool
+
 @export_category("AreaDefaults")
 @export var is_player_area:bool = false
 @export var area_color:Color = Color(0.0, 0.6, 0.702, 0.42):
@@ -21,6 +23,7 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 
 func _ready() -> void:
 	update_area_color()
+	setup_build_lines()
 
 func create_target():
 	var new_target:AdvancedCameraTarget = ADVANCED_CAMERA_TARGET.instantiate()
@@ -29,6 +32,7 @@ func create_target():
 	new_target.set_owner(get_tree().edited_scene_root)
 	new_target.set("modulate",Color(area_color.r,area_color.g,area_color.b))
 	area_targets.push_back(new_target)
+	setup_build_lines()
 
 func remove_last_target():
 	var last_area_target = area_targets.pop_back()
@@ -39,8 +43,16 @@ func update_area_color():
 	if collision_shape_2d:
 		collision_shape_2d.debug_color = area_color
 
+func setup_build_lines():
+	for target in area_targets:
+		target.target_parent = self
+		target.setup()
+
 func _on_area_entered(area: Area2D) -> void:
 	var advanced_camera_area_2d := area as AdvancedCameraArea2D
 	if advanced_camera_area_2d and is_player_area:
-		if area_targets:
-			G_Advanced_Cam.move_camera_to_target(area_targets.front())
+		if advanced_camera_area_2d.is_camera_release_area == true: 
+			G_Advanced_Cam.release_camera()
+			return
+		if advanced_camera_area_2d.area_targets.size() > 0:
+			G_Advanced_Cam.move_camera_to_target(advanced_camera_area_2d.area_targets.front())

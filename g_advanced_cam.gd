@@ -45,8 +45,12 @@ func get_camera_target():
 	if advanced_camera:
 		advanced_camera.get("camera_target")
 
-func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,move_type:MOVE_TO_TYPE = MOVE_TO_TYPE.SNAP):
+func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,_move_type:MOVE_TO_TYPE = MOVE_TO_TYPE.SNAP):
 	if advanced_camera:
 		set_camera_target(target)
 		advanced_camera.call("tween_to_target",target,time_to_reach_target)
 	pass
+
+func release_camera():
+	if advanced_camera:
+		advanced_camera.call("release_cam")

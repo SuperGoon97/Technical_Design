@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://dvjgqdaecrw8v"]
+[gd_scene load_steps=10 format=4 uid="uid://dvjgqdaecrw8v"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://advanced_camera_area_2d.tscn" id="5_6x818"]
 [ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Nodes/advanced_camera_target.tscn" id="6_ljryr"]
-[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Nodes/advanced_camera_target.gd" id="7_e83bm"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_cfhth")
@@ -467,14 +466,13 @@ camera_default_target = NodePath("../Gad2010Character")
 camera_default_follow_type = 2
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
-position = Vector2(-64, -55)
+position = Vector2(-67, -108)
 area_color = Color(0.6679158, 0.46783346, 0.5356279, 0.41960785)
 area_targets = [NodePath("AdvancedCameraTarget")]
 
-[node name="AdvancedCameraTarget" type="Node2D" parent="Core/advanced_camera_area2D" instance=ExtResource("6_ljryr")]
+[node name="AdvancedCameraTarget" parent="Core/advanced_camera_area2D" instance=ExtResource("6_ljryr")]
 modulate = Color(0.6679158, 0.46783346, 0.5356279, 1)
-position = Vector2(1267, -386)
-script = ExtResource("7_e83bm")
+position = Vector2(672, -518)
 
 [node name="Labels" type="Node" parent="."]
 
@@ -505,3 +503,8 @@ level_path = "res://template_content/scenes/gym.tscn"
 [node name="LevelEntry(Encounter)" parent="." instance=ExtResource("4_mtv41")]
 position = Vector2(768, 128)
 level_path = "res://template_content/scenes/boss_encounter.tscn"
+
+[node name="advanced_camera_area2D" parent="." instance=ExtResource("5_6x818")]
+position = Vector2(209, -112)
+is_camera_release_area = true
+area_color = Color(0, 0.64503676, 0.27508205, 0.41960785)
