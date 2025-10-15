@@ -17,8 +17,8 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 		update_area_color()
 	get:
 		return area_color
-@export var area_targets:Array[AdvancedCameraTarget]
 
+@export var area_targets:Array[AdvancedCameraTarget]
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 func _ready() -> void:
@@ -56,3 +56,6 @@ func _on_area_entered(area: Area2D) -> void:
 			return
 		if advanced_camera_area_2d.area_targets.size() > 0:
 			G_Advanced_Cam.move_camera_to_target(advanced_camera_area_2d.area_targets.front())
+
+func execute_camera_targets():
+	pass

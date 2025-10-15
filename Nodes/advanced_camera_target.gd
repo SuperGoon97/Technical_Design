@@ -4,6 +4,8 @@ class_name AdvancedCameraTarget extends Node2D
 signal draw_camera_icon_changed(state:bool)
 const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
 
+@export_tool_button("Force Update","Callable") var force_update = update_one_over_camera_zoom
+
 @export var _draw_viewport_rect:bool = true
 @export var _draw_camera_icon:bool = true:
 	get:
