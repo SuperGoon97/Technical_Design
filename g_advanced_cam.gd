@@ -1,6 +1,9 @@
 @tool
 extends Node
 
+signal camera_function_complete
+signal move_camera_on
+
 enum FOLLOW_TYPE{
 	## Camera stays in the given locaiton
 	STATIC,
@@ -8,6 +11,11 @@ enum FOLLOW_TYPE{
 	SNAP,
 	## Camera chases the target increasing in speed the further away it is
 	LAG,
+}
+
+enum TARGET_FUNCTION{
+	MOVE_TO,
+	STAY_IN_AREA
 }
 
 enum MOVE_TO_TYPE{
@@ -60,10 +68,34 @@ func get_camera_zoom():
 	else:
 		return get_temp_advanced_cam().zoom
 
-func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,_move_type:MOVE_TO_TYPE = MOVE_TO_TYPE.SNAP):
+func execute_target_function(target:AdvancedCameraTarget):
+	var move_type:TARGET_FUNCTION = target.target_function
+	match move_type:
+		TARGET_FUNCTION.MOVE_TO:
+			if target.camera_max_speed > 0:
+				move_camera_toward(target,target.camera_max_speed,target.camera_acceleration_speed,target.allow_overshoot)
+			else:
+				move_camera_to_target(target,target.time_to_reach_target,target.tween_easing)
+			await advanced_camera.camera_arrived_at_target
+			target.camera_at_target.emit()
+			if target.hold_camera_indefinitely:
+				await move_camera_on
+			if target.hold_camera_for > 0.0:
+				await get_tree().create_timer(target.hold_camera_for).timeout
+			camera_function_complete.emit()
+			return
+	pass
+
+func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,tween_easing:Tween.EaseType = Tween.EaseType.EASE_IN):
 	if advanced_camera:
 		set_camera_target(target)
-		advanced_camera.call("tween_to_target",target,time_to_reach_target)
+		advanced_camera.call("tween_to_target",target,time_to_reach_target,tween_easing)
+	pass
+
+func move_camera_toward(target:Node2D,camera_max_speed:float,camera_acceleration_speed:float,allow_overshoot:bool):
+	if advanced_camera:
+		set_camera_target(target)
+		advanced_camera.call("move_camera_until_at_target",target,camera_max_speed,camera_acceleration_speed,allow_overshoot)
 	pass
 
 func release_camera():

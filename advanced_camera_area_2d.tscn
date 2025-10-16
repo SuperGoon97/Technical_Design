@@ -10,11 +10,10 @@ size = Vector2(86, 110)
 collision_layer = 8
 collision_mask = 8
 script = ExtResource("1_43nta")
-area_color = null
-area_target_colors = Array[Color]([Color(1, 0, 0, 1), Color(0, 0, 1, 1)])
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_mpjcl")
+debug_color = Color(0, 0.6, 0.702, 0.42)
 
 [node name="AdvancedCameraSignalsNode" type="Node" parent="."]
 script = ExtResource("1_m7814")

@@ -6,11 +6,16 @@
 
 [node name="AdvancedCameraTarget" type="Node2D"]
 script = ExtResource("1_yyonb")
-camera_zoom_at_target = null
+time_to_reach_target = null
+camera_max_speed = null
+camera_acceleration_speed = null
+allow_overshoot = null
+hold_camera_for = null
+hold_camera_indefinitely = null
+tween_easing = null
 
 [node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_8k4pp")
 script = ExtResource("3_8k4pp")
 
 [connection signal="draw_camera_icon_changed" from="." to="AdvancedCameraTargetSprite" method="_on_advanced_camera_target_draw_camera_icon_changed"]
-[connection signal="property_list_changed" from="." to="." method="_on_property_list_changed"]

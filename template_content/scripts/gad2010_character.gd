@@ -48,6 +48,7 @@ func _physics_process(delta: float) -> void:
 		# Handle jump.
 		if Input.is_action_just_pressed("ui_accept"):
 			velocity.y = JUMP_VELOCITY
+			G_Advanced_Cam.move_camera_on.emit()
 			interrupt_interaction()
 
 	# Get the input direction and handle the movement/deceleration.

@@ -28,7 +28,12 @@ func _ready() -> void:
 func create_target():
 	var new_target:AdvancedCameraTarget = ADVANCED_CAMERA_TARGET.instantiate()
 	add_child(new_target)
-	new_target.target_parent = self
+	new_target.name = "AdvancedCameraTarget %s" % area_targets.size()
+	if area_targets.size() > 0:
+		new_target.target_parent = area_targets.back()
+	else:
+		new_target.target_parent = self
+		
 	new_target.set_owner(get_tree().edited_scene_root)
 	new_target.set("modulate",Color(area_color.r,area_color.g,area_color.b))
 	area_targets.push_back(new_target)
@@ -45,17 +50,19 @@ func update_area_color():
 
 func setup_build_lines():
 	for target in area_targets:
-		target.target_parent = self
 		target.setup()
 
 func _on_area_entered(area: Area2D) -> void:
 	var advanced_camera_area_2d := area as AdvancedCameraArea2D
-	if advanced_camera_area_2d and is_player_area:
-		if advanced_camera_area_2d.is_camera_release_area == true: 
+	if advanced_camera_area_2d and area.is_player_area:
+		if is_camera_release_area == true: 
 			G_Advanced_Cam.release_camera()
 			return
-		if advanced_camera_area_2d.area_targets.size() > 0:
-			G_Advanced_Cam.move_camera_to_target(advanced_camera_area_2d.area_targets.front())
+		if area_targets.size() > 0:
+			execute_camera_area_targets()
 
-func execute_camera_targets():
+func execute_camera_area_targets():
+	for target in area_targets:
+		G_Advanced_Cam.execute_target_function(target)
+		await G_Advanced_Cam.camera_function_complete
 	pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=4 uid="uid://dvjgqdaecrw8v"]
+[gd_scene load_steps=10 format=4 uid="uid://dvjgqdaecrw8v"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Nodes/advanced_camera_2d.tscn" id="4_lorlc"]
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://advanced_camera_area_2d.tscn" id="5_6x818"]
-[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Nodes/advanced_camera_target.gd" id="6_e83bm"]
 [ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Nodes/advanced_camera_target.tscn" id="6_ljryr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
@@ -469,14 +468,21 @@ camera_default_target = NodePath("../Gad2010Character")
 camera_default_follow_type = 2
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
-position = Vector2(-56, -104)
+position = Vector2(-48, -64)
 area_color = Color(0.667916, 0.467833, 0.535628, 0.419608)
-area_targets = [NodePath("AdvancedCameraTarget")]
+area_targets = [NodePath("AdvancedCameraTarget 0")]
 
-[node name="AdvancedCameraTarget" type="Node2D" parent="Core/advanced_camera_area2D" instance=ExtResource("6_ljryr")]
+[node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("target_parent") instance=ExtResource("6_ljryr")]
 modulate = Color(0.667916, 0.467833, 0.535628, 1)
-position = Vector2(584, -488)
-script = ExtResource("6_e83bm")
+position = Vector2(776, 0)
+time_to_reach_target = 1.0
+camera_max_speed = 300.0
+camera_acceleration_speed = 4.0
+allow_overshoot = true
+hold_camera_for = 0.0
+hold_camera_indefinitely = false
+tween_easing = 2
+target_parent = NodePath("..")
 
 [node name="Labels" type="Node" parent="."]
 
@@ -514,6 +520,3 @@ level_path = "res://template_content/scenes/boss_encounter.tscn"
 position = Vector2(72, 96)
 is_camera_release_area = true
 area_color = Color(0, 0.645037, 0.275082, 0.419608)
-
-[connection signal="draw_camera_icon_changed" from="Core/advanced_camera_area2D/AdvancedCameraTarget" to="Core/advanced_camera_area2D/AdvancedCameraTarget/AdvancedCameraTargetSprite" method="_on_advanced_camera_target_draw_camera_icon_changed"]
-[connection signal="property_list_changed" from="Core/advanced_camera_area2D/AdvancedCameraTarget" to="Core/advanced_camera_area2D/AdvancedCameraTarget" method="_on_property_list_changed"]
