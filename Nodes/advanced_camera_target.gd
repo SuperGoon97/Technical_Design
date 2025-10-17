@@ -31,15 +31,8 @@ const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
 
 ## Contains values used if Target Function is set to "Move To"
 @export_subgroup("Move To")
-## How long the camera will take to reach the target, if camera speed is a positive value this will be ignored
-@export_range(0.0,100.0,0.1) var time_to_reach_target:float = 1.0
-## If camera speed is a positive value time to reach target will be ignored and the camera will move a flat speed instead
-@export_range(-1.0,500.0,1.0) var camera_max_speed:float = -1.0
-## How quickly the camera will achieve max speed
-@export_range(0.0,100.0,0.1) var camera_acceleration_speed:float = 0.0
-## How long the camera will be held at location for before moving on
-@export var allow_overshoot:bool = false
-@export_custom(PROPERTY_HINT_RANGE,"0.0,100.0,0.1,suffix:s") var hold_camera_for:float = 0.0
+## Moves the camera by changing the camera target to this target
+@export var move_by_change_target:bool = false
 ## Hold the camera until told otherwise, use this to hold the camera in a position until you have finished showing the player something.
 ## You can see when the camera is at target area with the signal [signal AdvancedCameraTarget.camera_at_target].
 ## Can be used in conjunction with hold_camera_for, camera will await move_camera_on then start the hold timer.
@@ -50,8 +43,38 @@ const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
 ## G_Advanced_Cam.move_camera_on.emit()
 ## return
 @export var hold_camera_indefinitely:bool = false
+## Releases the camera assigning the target of the camera back to the default camera target
+@export var release_camera_back_to_default_after_hold:bool = true
+## How long the camera will take to reach the target, if camera speed is a positive value this will be ignored
+@export_range(0.0,100.0,0.1) var time_to_reach_target:float = 1.0
+## How long the camera will be held at location for before moving on
+@export_custom(PROPERTY_HINT_RANGE,"0.0,100.0,0.1,suffix:s") var hold_camera_for:float = 0.0
 ## Which easing to use for the camera "Move To"
 @export var tween_easing:Tween.EaseType = Tween.EaseType.EASE_IN_OUT
+
+## Contains values used if Target Function is set to "Stay In Area"
+@export_subgroup("Stay In Area")
+## Controls the north bound for the camera
+@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var north_bound:float = 0.0:
+	set(value):
+		north_bound = value
+		update_packed_bound_array()
+## Controls the south bound for the camera
+@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var south_bound:float = 0.0:
+	set(value):
+		south_bound = value
+		update_packed_bound_array()
+## Controls the east bound for the camera
+@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var east_bound:float = 0.0:
+	set(value):
+		east_bound = value
+		update_packed_bound_array()
+## Controls the west bound for the camera
+@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var west_bound:float = 0.0:
+	set(value):
+		west_bound = value
+		update_packed_bound_array()
+@export var teleport_camera_to_nearest_point_in_bounds:bool = false
 
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
@@ -59,10 +82,13 @@ var one_over_camera_zoom:Vector2
 var screen_position:Vector2
 var half_viewport_x:float
 var half_viewport_y:float
+var packed_array:PackedVector2Array
 
 func _draw() -> void:
 	if _draw_viewport_rect:
 		draw_viewport_rect()
+	if target_function == G_Advanced_Cam.TARGET_FUNCTION.STAY_IN_AREA:
+		draw_camera_bounds_rect()
 
 ## Draws the area the viewport will use, also draws the text above the box
 func draw_viewport_rect():
@@ -78,13 +104,36 @@ func draw_viewport_rect():
 	var dy = Vector2(half_viewport_x*one_over_camera_zoom.x,-half_viewport_y*one_over_camera_zoom.y)
 	var dyy = Vector2(-half_viewport_x*one_over_camera_zoom.x,-half_viewport_y*one_over_camera_zoom.y)
 
-	draw_line(dx,dy,_draw_color)
-	draw_line(dxx,dyy,_draw_color)
-	draw_line(dxx,dx,_draw_color)
-	draw_line(dyy,dy,_draw_color)
+	draw_line(dx,dy,self_modulate)
+	draw_line(dxx,dyy,self_modulate)
+	draw_line(dxx,dx,self_modulate)
+	draw_line(dyy,dy,self_modulate)
 	
 	draw_string(NEXA_CUSTOM_FONT,Vector2(-75.0,-(half_viewport_y*1.01)),"VIEWPORT SIZE")
 
+## Draws the bounds area
+func draw_camera_bounds_rect():
+	if packed_array.is_empty():
+		update_packed_bound_array()
+	
+	draw_line(packed_array[0],packed_array[1],_draw_color)
+	draw_line(packed_array[2],packed_array[3],_draw_color)
+	draw_line(packed_array[2],packed_array[0],_draw_color)
+	draw_line(packed_array[3],packed_array[1],_draw_color)
+
+## Creates bounds as a PackedVector2Array [0]NE [1]SE [2]NW [3]SW
+func create_bounds()-> PackedVector2Array:
+	var return_packed_array:PackedVector2Array = PackedVector2Array([Vector2(east_bound,-north_bound),Vector2(east_bound,south_bound),Vector2(-west_bound,-north_bound),Vector2(-west_bound,south_bound)])
+	return return_packed_array
+
+## Gets global bounds as a PackedVector2Array [0]NE [1]SE [2]NW [3]SW
+func get_global_bounds() -> PackedVector2Array:
+	var local_bounds:PackedVector2Array = create_bounds()
+	var return_packed_array:PackedVector2Array
+	for vector in local_bounds:
+		var global_vec = Vector2(vector.x+global_position.x,vector.y+global_position.y)
+		return_packed_array.append(global_vec)
+	return return_packed_array
 ## Creates the tool line 2d and adds it as a child (could also use a viewport draw instead)
 func setup():
 	camera_line = ToolLine2D.new()
@@ -93,10 +142,14 @@ func setup():
 	camera_line.global_position = Vector2(0,0)
 	camera_line.add_point(global_position,0)
 	camera_line.add_point(target_parent.global_position,1)
+	for child in get_children():
+		child.set("self_modulate",self_modulate)
 
 func update_one_over_camera_zoom():
 	one_over_camera_zoom = Vector2(1.0/camera_zoom_at_target.x,1.0/camera_zoom_at_target.y)
 
+func update_packed_bound_array():
+	packed_array = create_bounds()
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		queue_redraw()

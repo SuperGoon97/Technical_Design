@@ -6,13 +6,12 @@
 
 [node name="AdvancedCameraTarget" type="Node2D"]
 script = ExtResource("1_yyonb")
-time_to_reach_target = null
-camera_max_speed = null
-camera_acceleration_speed = null
-allow_overshoot = null
-hold_camera_for = null
-hold_camera_indefinitely = null
-tween_easing = null
+move_by_change_target = null
+release_camera_back_to_default_after_hold = null
+north_bound = null
+south_bound = null
+east_bound = null
+west_bound = null
 
 [node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_8k4pp")

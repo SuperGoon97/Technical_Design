@@ -72,8 +72,8 @@ func execute_target_function(target:AdvancedCameraTarget):
 	var move_type:TARGET_FUNCTION = target.target_function
 	match move_type:
 		TARGET_FUNCTION.MOVE_TO:
-			if target.camera_max_speed > 0:
-				move_camera_toward(target,target.camera_max_speed,target.camera_acceleration_speed,target.allow_overshoot)
+			if target.move_by_change_target:
+				move_camera_to_target_with_notify(target)
 			else:
 				move_camera_to_target(target,target.time_to_reach_target,target.tween_easing)
 			await advanced_camera.camera_arrived_at_target
@@ -82,20 +82,21 @@ func execute_target_function(target:AdvancedCameraTarget):
 				await move_camera_on
 			if target.hold_camera_for > 0.0:
 				await get_tree().create_timer(target.hold_camera_for).timeout
+			if target.release_camera_back_to_default_after_hold:
+				release_camera()
 			camera_function_complete.emit()
 			return
+		TARGET_FUNCTION.STAY_IN_AREA:
+			pass
 	pass
+
+func move_camera_to_target_with_notify(target:Node2D):
+	set_camera_target(target)
 
 func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,tween_easing:Tween.EaseType = Tween.EaseType.EASE_IN):
 	if advanced_camera:
 		set_camera_target(target)
 		advanced_camera.call("tween_to_target",target,time_to_reach_target,tween_easing)
-	pass
-
-func move_camera_toward(target:Node2D,camera_max_speed:float,camera_acceleration_speed:float,allow_overshoot:bool):
-	if advanced_camera:
-		set_camera_target(target)
-		advanced_camera.call("move_camera_until_at_target",target,camera_max_speed,camera_acceleration_speed,allow_overshoot)
 	pass
 
 func release_camera():

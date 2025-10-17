@@ -35,7 +35,7 @@ func create_target():
 		new_target.target_parent = self
 		
 	new_target.set_owner(get_tree().edited_scene_root)
-	new_target.set("modulate",Color(area_color.r,area_color.g,area_color.b))
+	new_target.set("self_modulate",Color(area_color.r,area_color.g,area_color.b))
 	area_targets.push_back(new_target)
 	setup_build_lines()
 

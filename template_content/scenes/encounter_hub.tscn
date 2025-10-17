@@ -469,19 +469,21 @@ camera_default_follow_type = 2
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
 position = Vector2(-48, -64)
-area_color = Color(0.667916, 0.467833, 0.535628, 0.419608)
+area_color = Color(0.34949, 0.59232, 0.49389, 0.419608)
 area_targets = [NodePath("AdvancedCameraTarget 0")]
 
 [node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("target_parent") instance=ExtResource("6_ljryr")]
-modulate = Color(0.667916, 0.467833, 0.535628, 1)
-position = Vector2(776, 0)
-time_to_reach_target = 1.0
-camera_max_speed = 300.0
-camera_acceleration_speed = 4.0
-allow_overshoot = true
-hold_camera_for = 0.0
-hold_camera_indefinitely = false
-tween_easing = 2
+self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
+position = Vector2(744, -464)
+target_function = 1
+_draw_color = Color(0.298039, 0, 0.537255, 1)
+move_by_change_target = false
+release_camera_back_to_default_after_hold = true
+north_bound = 630.0
+south_bound = 240.0
+east_bound = 1090.0
+west_bound = 75.0
+teleport_camera_to_nearest_point_in_bounds = null
 target_parent = NodePath("..")
 
 [node name="Labels" type="Node" parent="."]
