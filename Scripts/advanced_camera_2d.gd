@@ -18,7 +18,15 @@ var current_tween:Tween
 var camera_moving_to:bool = false
 var camera_target_changed:bool = false
 var camera_distance_tolerance:float = 10.0
+var camera_use_multi_target:bool = false:
+	get:
+		return camera_use_multi_target
+	set(value):
+		camera_use_multi_target = value
 
+## Lock to camera to camera bounds
+var lock_camera_to_camera_bounds:bool = false
+## Camera bounds stored as PackedVector2Array [0]NE [1]SE [2]NW [3]SW
 var camera_bounds:PackedVector2Array:
 	get:
 		return camera_bounds
@@ -32,6 +40,7 @@ var camera_bounds:PackedVector2Array:
 		if camera_target != value:
 			camera_target_changed = true
 		camera_target = value
+@onready var camera_multi_targets:Dictionary[Node2D,float] = {camera_target:1.0}
 @onready var camera_follow_type:G_Advanced_Cam.FOLLOW_TYPE = camera_default_follow_type
 @onready var camera_speed:float = camera_default_speed
 @onready var camera_lag_elastic:float = camera_default_lag_elastic
@@ -62,10 +71,18 @@ func snap_to_target(do_tween_to_target:bool = false, target_override:Node2D = ca
 
 ## Camera moves towards camera target
 func lag_to_target(delta:float ,speed_modifier:float = 100.0):
-	var direction:Vector2 = Vector2(camera_target.global_position - global_position).normalized()
-	var distance:float = global_position.distance_to(camera_target.global_position)
+	var direction:Vector2 = calculate_direction()
+	var distance:float = calculate_distance()
 	var rubber_banding:float = distance/camera_lag_elastic
-	global_position += (direction * speed_modifier * rubber_banding) * delta
+	if lock_camera_to_camera_bounds:
+		if check_position_within_bounds(global_position +((direction * speed_modifier * rubber_banding) * delta)):
+			global_position += (direction * speed_modifier * rubber_banding) * delta
+		elif check_position_within_x_bounds(Vector2(global_position.x +((direction.x * speed_modifier * rubber_banding) * delta),global_position.y)):
+			global_position.x += (direction.x * speed_modifier * rubber_banding) * delta
+		elif check_position_within_y_bounds(Vector2(global_position.x,global_position.y+((direction.y * speed_modifier * rubber_banding) * delta))):
+			global_position.y += (direction.y * speed_modifier * rubber_banding) * delta
+	else:
+		global_position += (direction * speed_modifier * rubber_banding) * delta
 	if camera_target_changed:
 		if global_position.distance_to(camera_target.global_position) < camera_distance_tolerance:
 			camera_arrived_at_target.emit(camera_target)
@@ -130,9 +147,16 @@ func tween_to_target(target:Node2D = camera_default_target,time_to_reach_target:
 		#await get_tree().physics_frame
 	#force_to_target(target)
 
+## Forces camera to target Node2D
 func force_to_target(target:Node2D = camera_target):
 	global_position = target.global_position
 	camera_arrived_at_target.emit(target)
+
+## Forces camera to target Vector2D
+func force_to_vector(vec:Vector2):
+	if vec:
+		global_position = vec
+
 
 ## Kills the any active tween
 func kill_tween():
@@ -148,7 +172,64 @@ func release_cam():
 	camera_lag_elastic = camera_default_lag_elastic
 	kill_tween()
 	camera_moving_to = false
+
+func calculate_direction():
+	var ret_direction:Vector2
+	if !camera_use_multi_target:
+		ret_direction = Vector2(camera_target.global_position - global_position).normalized()
+	elif camera_use_multi_target:
+		ret_direction = Vector2(calculate_multi_target_point() - global_position).normalized()
+	return ret_direction
+
+func calculate_distance() -> float:
+	var ret_distance:float
+	if !camera_use_multi_target:
+		ret_distance = global_position.distance_to(camera_target.global_position)
+	elif camera_use_multi_target:
+		ret_distance = global_position.distance_to(calculate_multi_target_point())
+	return ret_distance
+
+## Simple summ function
+func sum(accum:float, number:float) -> float:
+	return accum+number
+
+## calculates the weighted barycentre of the targets in camera_multi_targets
+func calculate_multi_target_point() -> Vector2:
+	#print(camera_multi_targets)
+	var sum_vec:Vector2 = Vector2(0.0,0.0)
+	var ret_vec:Vector2
+	var sum_weight:float = camera_multi_targets.values().reduce(sum,0.0)
+	for key in camera_multi_targets:
+		sum_vec = Vector2(sum_vec.x + (key.global_position.x * camera_multi_targets[key]),sum_vec.y + (key.global_position.y * camera_multi_targets[key]))
 	
+	ret_vec = Vector2(sum_vec.x/sum_weight,sum_vec.y/sum_weight)
+	return ret_vec
+	
+## Adds a new target to camera multi target, default weight is 1.0
+func add_camera_multi_target(target:Node2D,weight:float = 1.0):
+	print("add")
+	camera_multi_targets[target] = weight
+
+## Checks if the position is within the cameras y bound
+func check_position_within_y_bounds(pos:Vector2) -> bool:
+	if pos.y > camera_bounds[0].y:
+		if pos.y < camera_bounds[1].y:
+			return true
+	return false
+
+## Checks if the position is within the cameras x bound
+func check_position_within_x_bounds(pos:Vector2) -> bool:
+	if pos.x < camera_bounds[1].x:
+		if pos.x > camera_bounds[2].x:
+			return true
+	return false
+
+## Checks if the position is withing the cameras bounds
+func check_position_within_bounds(pos:Vector2) -> bool:
+	if check_position_within_x_bounds(pos):
+		if check_position_within_y_bounds(pos):
+			return true
+	return false
 
 ## Sets camera defaults to the current camera settings
 func set_camera_defaults_to_current():

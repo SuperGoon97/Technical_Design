@@ -468,22 +468,18 @@ camera_default_target = NodePath("../Gad2010Character")
 camera_default_follow_type = 2
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
-position = Vector2(-48, -64)
+position = Vector2(-72, -72)
 area_color = Color(0.34949, 0.59232, 0.49389, 0.419608)
 area_targets = [NodePath("AdvancedCameraTarget 0")]
 
-[node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("target_parent") instance=ExtResource("6_ljryr")]
+[node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("multi_targets", "target_parent") instance=ExtResource("6_ljryr")]
 self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
-position = Vector2(744, -464)
-target_function = 1
-_draw_color = Color(0.298039, 0, 0.537255, 1)
-move_by_change_target = false
-release_camera_back_to_default_after_hold = true
-north_bound = 630.0
-south_bound = 240.0
-east_bound = 1090.0
-west_bound = 75.0
-teleport_camera_to_nearest_point_in_bounds = null
+position = Vector2(688, -440)
+target_function = 2
+multi_targets = {
+NodePath("../../../LevelEntry(Encounter)"): 1.0,
+NodePath("."): 1.0
+}
 target_parent = NodePath("..")
 
 [node name="Labels" type="Node" parent="."]
@@ -517,8 +513,3 @@ level_path = "res://template_content/scenes/gym.tscn"
 [node name="LevelEntry(Encounter)" parent="." instance=ExtResource("4_mtv41")]
 position = Vector2(768, 128)
 level_path = "res://template_content/scenes/boss_encounter.tscn"
-
-[node name="advanced_camera_area2D" parent="." instance=ExtResource("5_6x818")]
-position = Vector2(72, 96)
-is_camera_release_area = true
-area_color = Color(0, 0.645037, 0.275082, 0.419608)

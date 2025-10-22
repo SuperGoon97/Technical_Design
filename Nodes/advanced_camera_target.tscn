@@ -6,12 +6,7 @@
 
 [node name="AdvancedCameraTarget" type="Node2D"]
 script = ExtResource("1_yyonb")
-move_by_change_target = null
-release_camera_back_to_default_after_hold = null
-north_bound = null
-south_bound = null
-east_bound = null
-west_bound = null
+camera_use_multi_target = null
 
 [node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
 texture = ExtResource("2_8k4pp")

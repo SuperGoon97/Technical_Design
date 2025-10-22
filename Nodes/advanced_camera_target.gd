@@ -76,6 +76,20 @@ const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
 		update_packed_bound_array()
 @export var teleport_camera_to_nearest_point_in_bounds:bool = false
 
+enum MULTI_TARGET_MODE{
+	## Adds the multi target dict to current camera multi targets
+	ADD,
+	## Sets the cameras multi target dict to this
+	SET,
+}
+@export_subgroup("Multi Target")
+## Changes if multi target mode should be used by the camera
+@export var camera_use_multi_target:bool = true
+## Changes how the multi target dict is used, see ENUM for uses
+@export var multi_target_mode:MULTI_TARGET_MODE = MULTI_TARGET_MODE.ADD
+## Multi target dict with Node2D targets and float weights, weights are used to indicate how much pull the target should have on the camera
+@export var multi_targets:Dictionary[Node2D,float] = {}
+
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
 @export_custom(PROPERTY_HINT_NODE_TYPE,"Node2D",PROPERTY_USAGE_STORAGE) var target_parent:Node2D
@@ -134,6 +148,26 @@ func get_global_bounds() -> PackedVector2Array:
 		var global_vec = Vector2(vector.x+global_position.x,vector.y+global_position.y)
 		return_packed_array.append(global_vec)
 	return return_packed_array
+
+func get_closest_point_within_bounds(pos:Vector2) -> PackedVector2Array:
+	var g_bounds:PackedVector2Array = get_global_bounds()
+	var vec1:Vector2 = Vector2(0.0,0.0)
+	var vec2:Vector2 = Vector2(0.0,0.0)
+	if pos.x < g_bounds[2].x:
+		vec1 = g_bounds[2]
+		vec2 = g_bounds[3]
+	elif pos.x > g_bounds[0].x:
+		vec1 = g_bounds[0]
+		vec2 = g_bounds[1]
+	elif pos.y > g_bounds[1].y:
+		vec1 = g_bounds[1]
+		vec2 = g_bounds[3]
+	elif pos.y < g_bounds[0].y:
+		vec1 = g_bounds[2]
+		vec2 = g_bounds[0]
+	var intersect_point:PackedVector2Array = Geometry2D.get_closest_points_between_segments(vec1,vec2,pos,global_position)
+	return intersect_point
+
 ## Creates the tool line 2d and adds it as a child (could also use a viewport draw instead)
 func setup():
 	camera_line = ToolLine2D.new()
@@ -150,6 +184,7 @@ func update_one_over_camera_zoom():
 
 func update_packed_bound_array():
 	packed_array = create_bounds()
+
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
 		queue_redraw()

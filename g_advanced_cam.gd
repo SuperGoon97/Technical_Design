@@ -15,7 +15,8 @@ enum FOLLOW_TYPE{
 
 enum TARGET_FUNCTION{
 	MOVE_TO,
-	STAY_IN_AREA
+	STAY_IN_AREA,
+	MULTI_TARGET,
 }
 
 enum MOVE_TO_TYPE{
@@ -68,6 +69,28 @@ func get_camera_zoom():
 	else:
 		return get_temp_advanced_cam().zoom
 
+func get_camera_is_bound() -> bool:
+	if advanced_camera:
+		return advanced_camera.lock_camera_to_camera_bounds
+	else: return false
+
+func set_camera_is_bound(value:bool):
+	if advanced_camera:
+		advanced_camera.set("lock_camera_to_camera_bounds",value)
+
+func set_camera_bounds(bounds:PackedVector2Array):
+	if advanced_camera:
+		advanced_camera.set("camera_bounds",bounds)
+
+func get_camera_multi_target_mode() -> bool:
+	if advanced_camera:
+		return advanced_camera.camera_use_multi_target
+	else: return false
+
+func set_camera_multi_target_mode(value:bool):
+	if advanced_camera:
+		advanced_camera.set("camera_use_multi_target",value)
+
 func execute_target_function(target:AdvancedCameraTarget):
 	var move_type:TARGET_FUNCTION = target.target_function
 	match move_type:
@@ -87,8 +110,28 @@ func execute_target_function(target:AdvancedCameraTarget):
 			camera_function_complete.emit()
 			return
 		TARGET_FUNCTION.STAY_IN_AREA:
-			pass
-	pass
+			set_camera_bounds(target.get_global_bounds())
+			set_camera_is_bound(true)
+			if target.teleport_camera_to_nearest_point_in_bounds:
+				var vec_array:PackedVector2Array = target.get_closest_point_within_bounds(get_camera_target().global_position)
+				force_camera_to_vector(vec_array[0])
+			return
+		TARGET_FUNCTION.MULTI_TARGET:
+			set_camera_multi_target_mode(target.camera_use_multi_target)
+			match target.multi_target_mode:
+				target.MULTI_TARGET_MODE.ADD:
+					add_camera_multi_targets(target.multi_targets)
+				target.MULTI_TARGET_MODE.SET:
+					set_camera_multi_targets(target.multi_targets)
+
+func set_camera_multi_targets(dict:Dictionary[Node2D,float]):
+	if advanced_camera:
+		advanced_camera.set("camera_multi_targets",dict)
+
+func add_camera_multi_targets(dict:Dictionary[Node2D,float]):
+	if advanced_camera:
+		for key in dict:
+			advanced_camera.call("add_camera_multi_target",key,dict[key])
 
 func move_camera_to_target_with_notify(target:Node2D):
 	set_camera_target(target)
@@ -102,6 +145,10 @@ func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,tween_
 func release_camera():
 	if advanced_camera:
 		advanced_camera.call("release_cam")
+
+func force_camera_to_vector(vec:Vector2):
+	if advanced_camera:
+		advanced_camera.call("force_to_vector",vec)
 
 func get_temp_advanced_cam():
 	return get_tree().get_first_node_in_group("AdvancedCamera2D")
