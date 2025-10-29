@@ -2,7 +2,8 @@ class_name AdvancedCamera2D extends Camera2D
 ## Base class for AdvancedCameras, inherits from camera2D
 
 
-signal camera_arrived_at_target (target:Node2D)
+signal camera_arrived_at_target(target:Node2D)
+signal camera_zoom_change_complete()
 signal camera_shake_complete()
 
 @export_category("CameraDefaults")
@@ -10,6 +11,11 @@ signal camera_shake_complete()
 @export var camera_default_target:Node2D
 ## Starting camera follow mode. Possible modes are STATIC,SNAP,LAG
 @export var camera_default_follow_type:G_Advanced_Cam.FOLLOW_TYPE
+## Camera default zoom
+@export_custom(PROPERTY_HINT_LINK,"") var camera_default_zoom:Vector2 = Vector2(1.0,1.0):
+	set(value):
+		zoom = value
+		camera_default_zoom = value
 ## Default speed the camera will travel
 @export_range(0.0,1000.0,1.0,"or_greater") var camera_default_speed:float = 50.0
 ## Default "elasticity" of the camera in lag mode
@@ -192,14 +198,14 @@ func force_to_vector(vec:Vector2):
 	if vec:
 		global_position = vec
 
-## Kills the any active tween
+## Kills any active tween
 func kill_tween():
 	if current_tween:
 		if current_tween.is_running():
 			current_tween.kill()
 
 ## Resets camera focusing back on the default target
-func release_cam():
+func camera_to_default():
 	camera_target = camera_default_target
 	camera_speed = camera_default_speed
 	camera_follow_type = camera_default_follow_type
@@ -255,12 +261,22 @@ func add_camera_shake(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:f
 	camera_shake_y = shake_y
 	camera_shake_indefinitely = camera_shake_indef
 
+func change_camera_zoom(new_zoom:Vector2,do_tween:bool = false,time_to_reach_zoom:float = 0.5):
+	if !do_tween:
+		zoom = new_zoom
+		return
+	var zoom_tween:Tween = create_tween()
+	zoom_tween.tween_property(self,"zoom",new_zoom,time_to_reach_zoom)
+	await zoom_tween.finished
+	camera_zoom_change_complete.emit()
+
 func camera_shake():
 	var strength = pow(camera_shake_strength,camera_shake_strength_pow)
 	if camera_shake_x:
 		offset.x = (camera_shake_amplitude * strength * sample_camera_noise(Vector2(camera_perlin_noise.seed,camera_shake_noise_y))* camera_shake_warm_up)
 	if camera_shake_y:
 		offset.y = (camera_shake_amplitude * strength * sample_camera_noise(Vector2(camera_perlin_noise.seed*2.0,camera_shake_noise_y))* camera_shake_warm_up)
+	
 ## Checks if the position is within the cameras y bound
 func check_position_within_y_bounds(pos:Vector2) -> bool:
 	if pos.y > camera_bounds[0].y:
@@ -288,6 +304,7 @@ func set_camera_defaults_to_current():
 	camera_default_speed = camera_speed
 	camera_default_follow_type = camera_follow_type
 	camera_default_lag_elastic = camera_lag_elastic
+	camera_default_zoom = zoom
 	
 ## Runs all "check" functions
 func ready_checks():

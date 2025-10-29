@@ -3,7 +3,8 @@
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_unjjx"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_fumtr"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_agx27"]
-[ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Nodes/advanced_camera_2d.tscn" id="4_y8acl"]
+[ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Scenes/AdvancedCam/advanced_camera_2d.tscn" id="4_y8acl"]
+
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_fumtr")

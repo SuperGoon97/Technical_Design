@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cfsft14yqws1u"]
-
-[ext_resource type="Script" uid="uid://tlqiajq301bl" path="res://advanced_camera_node.gd" id="1_tidcl"]
-
-[node name="advanced_camera_signals_node" type="Node"]
-script = ExtResource("1_tidcl")

@@ -3,11 +3,11 @@
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_2mkwc"]
-[ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Nodes/advanced_camera_2d.tscn" id="4_lorlc"]
+[ext_resource type="PackedScene" uid="uid://drxgbbvowyje4" path="res://Scenes/AdvancedCam/advanced_camera_2d.tscn" id="4_lorlc"]
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
-[ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://advanced_camera_area_2d.tscn" id="5_6x818"]
-[ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Nodes/advanced_camera_target.tscn" id="6_ljryr"]
-[ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://fps_counter.tscn" id="8_ljryr"]
+[ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://Scenes/AdvancedCam/advanced_camera_area_2d.tscn" id="5_6x818"]
+[ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Scenes/AdvancedCam/advanced_camera_target.tscn" id="6_ljryr"]
+[ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://Scenes/Utility/fps_counter.tscn" id="8_ljryr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_cfhth")
@@ -490,28 +490,26 @@ theme_override_constants/outline_size = 4
 
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
 position = Vector2(-72, -72)
+is_one_shot = true
 area_color = Color(0.34949, 0.59232, 0.49389, 0.419608)
-area_targets = [NodePath("AdvancedCameraTarget 0")]
+area_targets = [NodePath("AdvancedCameraTarget 0"), NodePath("AdvancedCameraTarget 1")]
 
-[node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("multi_targets", "target_parent") instance=ExtResource("6_ljryr")]
+[node name="AdvancedCameraTarget 0" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("target_parent") instance=ExtResource("6_ljryr")]
 self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
-position = Vector2(688, -440)
-target_function = 3
+position = Vector2(576, -528)
 _draw_viewport_rect = false
-multi_targets = {
-NodePath("../../../LevelEntry(Encounter)"): 1.0,
-NodePath("."): 1.0
-}
-stop_shake = false
-amplitude = 40.0
-strength_mode = 1
-strength = 1.0
-strength_power = 2.0
-decay = 0.5
-shake_x = true
-shake_y = true
-shake_indefinitely = false
+camera_zoom_at_target = Vector2(1.5, 1.5)
+do_tween_camera_zoom = true
+move_by_change_target = true
 target_parent = NodePath("..")
+
+[node name="AdvancedCameraTarget 1" parent="Core/advanced_camera_area2D" node_paths=PackedStringArray("target_parent") instance=ExtResource("6_ljryr")]
+self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
+position = Vector2(-328, -512)
+_draw_viewport_rect = false
+do_tween_camera_zoom = true
+hold_camera_for = 1.0
+target_parent = NodePath("../AdvancedCameraTarget 0")
 
 [node name="Labels" type="Node" parent="."]
 

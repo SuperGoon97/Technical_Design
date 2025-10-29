@@ -4,9 +4,8 @@ class_name AdvancedCameraTarget extends Node2D
 ## Emitted when the camera has arrived this target
 @warning_ignore("unused_signal")
 signal camera_at_target
-## Emitted when draw camera icon bool is changed, informs sprite to toggle visibility
 signal draw_camera_icon_changed(state:bool)
-const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
+const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 
 @export_tool_button("Force Update","Callable") var force_update = update_one_over_camera_zoom
 @export var target_function:G_Advanced_Cam.TARGET_FUNCTION = G_Advanced_Cam.TARGET_FUNCTION.MOVE_TO:
@@ -28,7 +27,10 @@ const NEXA_CUSTOM_FONT = preload("res://nexa_custom_font.tres")
 	set(value):
 		update_one_over_camera_zoom()
 		camera_zoom_at_target = value
-
+## Changes if the camera will tween to the desired zoom or snap to the desired zoom
+@export var do_tween_camera_zoom:bool = false
+## The speed that the camera will tween to desired zoom if do_tween_camera_zoom is true
+@export var camera_zoom_speed:float = 0.5
 ## Contains values used if Target Function is set to "Move To"
 @export_subgroup("Move To")
 ## Moves the camera by changing the camera target to this target
@@ -127,6 +129,7 @@ var screen_position:Vector2
 var half_viewport_x:float
 var half_viewport_y:float
 var packed_array:PackedVector2Array
+
 
 func _draw() -> void:
 	if _draw_viewport_rect:

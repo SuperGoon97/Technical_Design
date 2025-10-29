@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://ee6v7vvejn28"
-path="res://.godot/imported/Nexa-Heavy.ttf-9bc0b65df4cf64f0e227b13ab42578e9.fontdata"
+path="res://.godot/imported/Nexa-Heavy.ttf-003c494ddd6320cb070fa2ddf980e8d5.fontdata"
 
 [deps]
 
-source_file="res://Nexa-Heavy.ttf"
-dest_files=["res://.godot/imported/Nexa-Heavy.ttf-9bc0b65df4cf64f0e227b13ab42578e9.fontdata"]
+source_file="res://Resources/Fonts/Nexa-Heavy.ttf"
+dest_files=["res://.godot/imported/Nexa-Heavy.ttf-003c494ddd6320cb070fa2ddf980e8d5.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=4
 keep_rounding_remainders=true

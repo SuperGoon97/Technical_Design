@@ -12,11 +12,11 @@ config_version=5
 
 config/name="GAD2010-Godot"
 run/main_scene="uid://dvjgqdaecrw8v"
-config/features=PackedStringArray("4.4", "GL Compatibility")
+config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]
 
-G_Advanced_Cam="*res://g_advanced_cam.gd"
+G_Advanced_Cam="*res://Scripts/g_advanced_cam.gd"
 
 [display]
 

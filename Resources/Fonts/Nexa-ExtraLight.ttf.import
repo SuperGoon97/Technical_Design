@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://cvqnsfgya78lw"
-path="res://.godot/imported/Nexa-ExtraLight.ttf-eedcf79f7929550c8f1d35b8976806e6.fontdata"
+path="res://.godot/imported/Nexa-ExtraLight.ttf-5126ddabe55b17bbb64accfdf4100d88.fontdata"
 
 [deps]
 
-source_file="res://Nexa-ExtraLight.ttf"
-dest_files=["res://.godot/imported/Nexa-ExtraLight.ttf-eedcf79f7929550c8f1d35b8976806e6.fontdata"]
+source_file="res://Resources/Fonts/Nexa-ExtraLight.ttf"
+dest_files=["res://.godot/imported/Nexa-ExtraLight.ttf-5126ddabe55b17bbb64accfdf4100d88.fontdata"]
 
 [params]
 
@@ -21,6 +21,7 @@ msdf_pixel_range=8
 msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
+modulate_color_glyphs=false
 hinting=1
 subpixel_positioning=4
 keep_rounding_remainders=true

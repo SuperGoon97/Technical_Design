@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://d0a6hn2egbpu4"]
 
-[ext_resource type="Script" uid="uid://ivlhrcurgbsc" path="res://fps_counter.gd" id="1_mbga4"]
+[ext_resource type="Script" uid="uid://ivlhrcurgbsc" path="res://Scripts/fps_counter.gd" id="1_mbga4"]
 
 
 [node name="DebugFpsCounter" type="Label"]

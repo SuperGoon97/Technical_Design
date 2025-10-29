@@ -8,6 +8,7 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 @export_tool_button("Remove Last Area Target","Callable") var remove_last_target_action = remove_last_target
 
 @export var is_camera_release_area:bool
+@export var is_one_shot:bool = false
 
 @export_category("AreaDefaults")
 @export var is_player_area:bool = false
@@ -20,6 +21,8 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 
 @export var area_targets:Array[AdvancedCameraTarget]
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
+
+var has_activated = false
 
 func _ready() -> void:
 	update_area_color()
@@ -53,16 +56,18 @@ func setup_build_lines():
 		target.setup()
 
 func _on_area_entered(area: Area2D) -> void:
-	var advanced_camera_area_2d := area as AdvancedCameraArea2D
-	if advanced_camera_area_2d and area.is_player_area:
-		if is_camera_release_area == true: 
-			G_Advanced_Cam.release_camera()
-			return
-		if area_targets.size() > 0:
-			execute_camera_area_targets()
+	if has_activated == false:
+		var advanced_camera_area_2d := area as AdvancedCameraArea2D
+		if advanced_camera_area_2d and area.is_player_area:
+			if is_camera_release_area == true: 
+				G_Advanced_Cam.set_camera_to_default()
+				return
+			if area_targets.size() > 0:
+				execute_camera_area_targets()
+		if is_one_shot:
+			has_activated = true
 
 func execute_camera_area_targets():
 	for target in area_targets:
 		G_Advanced_Cam.execute_target_function(target)
 		await G_Advanced_Cam.camera_function_complete
-	pass
