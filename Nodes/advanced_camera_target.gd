@@ -90,6 +90,36 @@ enum MULTI_TARGET_MODE{
 ## Multi target dict with Node2D targets and float weights, weights are used to indicate how much pull the target should have on the camera
 @export var multi_targets:Dictionary[Node2D,float] = {}
 
+enum STRENGTH_MODE{
+	## Adds strength to the current camera shake strength
+	ADD,
+	## Sets the cameras shake strength
+	SET,
+}
+@export_subgroup("Shake")
+## If true the camera will be told to stop shaking indefinitely, the rest of the properties are ignored from this action
+@export var stop_shake:bool = false
+## Amplitude is the base for the shake
+@export_range(0.0,100.0,1.0,"or_greater") var amplitude:float = 40.0
+## Changes if strength will be added or set, adding strength can get very shakey very quickly. Note all other properties are treat as set
+@export var strength_mode:STRENGTH_MODE = STRENGTH_MODE.SET
+## Strength is the multiplier for the amplitude, it decays as the shake progresses
+@export_range(1.0,10.0,0.1,"or_greater") var strength:float = 1.0
+## Strength power is the amount strengh is pow() by
+## [codeblock]
+## func _foo() -> float:
+## var strength:float = 1.0
+## var strength_pow:float = 2.0
+## return pow(strength,strength_pow)
+@export_range(1.0,4.0,0.1,"or_greater") var strength_power:float = 2.0
+## Decay changes the amount strength is decreased by, higher decay means the camera will come to a stop quicker. If you want the camera to shake indefintely use the "shake indefinitely" bool
+@export_range(0.1,10.0,0.1,"or_less","or_greater") var decay:float = 0.5
+## Changes if the shake will move the camera on the x axis
+@export var shake_x:bool = true
+## Changes if the shake will move the camera on the y axis
+@export var shake_y:bool = true
+## Makes it so the strength will never decay until stop shake is used
+@export var shake_indefinitely:bool = false
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
 @export_custom(PROPERTY_HINT_NODE_TYPE,"Node2D",PROPERTY_USAGE_STORAGE) var target_parent:Node2D
@@ -123,7 +153,7 @@ func draw_viewport_rect():
 	draw_line(dxx,dx,self_modulate)
 	draw_line(dyy,dy,self_modulate)
 	
-	draw_string(NEXA_CUSTOM_FONT,Vector2(-75.0,-(half_viewport_y*1.01)),"VIEWPORT SIZE")
+	draw_string(NEXA_CUSTOM_FONT,Vector2(-75.0,(-(half_viewport_y*1.01)*one_over_camera_zoom.y)),"VIEWPORT SIZE")
 
 ## Draws the bounds area
 func draw_camera_bounds_rect():

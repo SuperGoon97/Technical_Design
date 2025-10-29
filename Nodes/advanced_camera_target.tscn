@@ -6,9 +6,18 @@
 
 [node name="AdvancedCameraTarget" type="Node2D"]
 script = ExtResource("1_yyonb")
-camera_use_multi_target = null
+stop_shake = null
+amplitude = null
+strength_mode = null
+strength = null
+strength_power = null
+decay = null
+shake_x = null
+shake_y = null
+shake_indefinitely = null
 
 [node name="AdvancedCameraTargetSprite" type="Sprite2D" parent="."]
+scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_8k4pp")
 script = ExtResource("3_8k4pp")
 

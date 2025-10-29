@@ -17,6 +17,7 @@ enum TARGET_FUNCTION{
 	MOVE_TO,
 	STAY_IN_AREA,
 	MULTI_TARGET,
+	SHAKE,
 }
 
 enum MOVE_TO_TYPE{
@@ -91,6 +92,15 @@ func set_camera_multi_target_mode(value:bool):
 	if advanced_camera:
 		advanced_camera.set("camera_use_multi_target",value)
 
+func get_camera_shake_indefinitely() -> bool:
+	if advanced_camera:
+		return advanced_camera.camera_shake_indefinitely
+	else: return false
+
+func set_camera_shake_indefinitely(value:bool):
+	if advanced_camera:
+		advanced_camera.set("camera_shake_indefinitely",value)
+
 func execute_target_function(target:AdvancedCameraTarget):
 	var move_type:TARGET_FUNCTION = target.target_function
 	match move_type:
@@ -123,6 +133,15 @@ func execute_target_function(target:AdvancedCameraTarget):
 					add_camera_multi_targets(target.multi_targets)
 				target.MULTI_TARGET_MODE.SET:
 					set_camera_multi_targets(target.multi_targets)
+		TARGET_FUNCTION.SHAKE:
+			if target.stop_shake:
+				set_camera_shake_indefinitely(false)
+				return
+			match target.strength_mode:
+				target.STRENGTH_MODE.ADD:
+					shake_camera(target.strength,target.strength_power,target.decay,target.shake_x,target.shake_y,target.shake_indefinitely,true)
+				target.STRENGTH_MODE.SET:
+					shake_camera(target.strength,target.strength_power,target.decay,target.shake_x,target.shake_y,target.shake_indefinitely,false)
 
 func set_camera_multi_targets(dict:Dictionary[Node2D,float]):
 	if advanced_camera:
@@ -140,7 +159,10 @@ func move_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,tween_
 	if advanced_camera:
 		set_camera_target(target)
 		advanced_camera.call("tween_to_target",target,time_to_reach_target,tween_easing)
-	pass
+
+func shake_camera(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:float = 0.5,shake_x:bool = true ,shake_y:bool = true,camera_shake_indef:bool = false,add_strength = true):
+	if advanced_camera:
+		advanced_camera.call("add_camera_shake",strength,strength_pow,decay_rate,shake_x,shake_y,camera_shake_indef,add_strength)
 
 func release_camera():
 	if advanced_camera:

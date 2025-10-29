@@ -3,6 +3,7 @@ class_name AdvancedCamera2D extends Camera2D
 
 
 signal camera_arrived_at_target (target:Node2D)
+signal camera_shake_complete()
 
 @export_category("CameraDefaults")
 ## Cameras default target, may throw errors if "null"
@@ -23,7 +24,31 @@ var camera_use_multi_target:bool = false:
 		return camera_use_multi_target
 	set(value):
 		camera_use_multi_target = value
-
+# Camera shakevariables
+## Amplitude is base multiplier for camera offset during shake
+var camera_shake_amplitude:float = 40.0:
+	get:
+		return camera_shake_amplitude
+	set(value):
+		camera_shake_amplitude = value
+## Camera shake strength, this value affects the offset strength alot so keep it small
+var camera_shake_strength:float = 0.0
+## Power value for camera shake strength
+var camera_shake_strength_pow:float = 2.0
+## Rate that camera shake is reduced
+var camera_shake_decay:float = 0.5:
+	get:
+		return camera_shake_decay
+	set(value):
+		camera_shake_decay = value
+## How jittery the camera shake is
+var camera_shake_noise_speed:float = 5.0
+var camera_shake_noise_y:float = 0.0
+var camera_shake_x:bool = true
+var camera_shake_y:bool = true
+var camera_shake_warm_up:float = 0.0
+var camera_warm_up_rate:float = 10.0
+var camera_shake_indefinitely:bool = false
 ## Lock to camera to camera bounds
 var lock_camera_to_camera_bounds:bool = false
 ## Camera bounds stored as PackedVector2Array [0]NE [1]SE [2]NW [3]SW
@@ -44,12 +69,22 @@ var camera_bounds:PackedVector2Array:
 @onready var camera_follow_type:G_Advanced_Cam.FOLLOW_TYPE = camera_default_follow_type
 @onready var camera_speed:float = camera_default_speed
 @onready var camera_lag_elastic:float = camera_default_lag_elastic
+@onready var camera_perlin_noise:FastNoiseLite = FastNoiseLite.new()
 
 func _ready() -> void:
 	ready_checks()
 
 func _physics_process(delta: float) -> void:
 	follow_target(delta)
+	if camera_shake_strength > 0.0:
+		camera_shake_warm_up = min(camera_shake_warm_up + camera_warm_up_rate * delta ,1.0)
+		if !camera_shake_indefinitely:
+			camera_shake_strength = max(camera_shake_strength - camera_shake_decay * delta,0.0)
+		camera_shake_noise_y += camera_shake_noise_speed * (1.0 / (camera_shake_strength+ 0.1))
+		camera_shake()
+		if camera_shake_strength == 0.0:
+			camera_shake_complete.emit()
+			camera_shake_warm_up = 0.0
 
 ## Match statement to decide which follow type is in use
 func follow_target(delta: float):
@@ -157,7 +192,6 @@ func force_to_vector(vec:Vector2):
 	if vec:
 		global_position = vec
 
-
 ## Kills the any active tween
 func kill_tween():
 	if current_tween:
@@ -210,6 +244,23 @@ func add_camera_multi_target(target:Node2D,weight:float = 1.0):
 	print("add")
 	camera_multi_targets[target] = weight
 
+func add_camera_shake(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:float = 0.5,shake_x:bool = true ,shake_y:bool = true,camera_shake_indef:bool = false,add_strength:bool = true):
+	if add_strength:
+		camera_shake_strength += strength
+	else:
+		camera_shake_strength = strength
+	camera_shake_strength_pow = strength_pow
+	camera_shake_decay = decay_rate
+	camera_shake_x = shake_x
+	camera_shake_y = shake_y
+	camera_shake_indefinitely = camera_shake_indef
+
+func camera_shake():
+	var strength = pow(camera_shake_strength,camera_shake_strength_pow)
+	if camera_shake_x:
+		offset.x = (camera_shake_amplitude * strength * sample_camera_noise(Vector2(camera_perlin_noise.seed,camera_shake_noise_y))* camera_shake_warm_up)
+	if camera_shake_y:
+		offset.y = (camera_shake_amplitude * strength * sample_camera_noise(Vector2(camera_perlin_noise.seed*2.0,camera_shake_noise_y))* camera_shake_warm_up)
 ## Checks if the position is within the cameras y bound
 func check_position_within_y_bounds(pos:Vector2) -> bool:
 	if pos.y > camera_bounds[0].y:
@@ -243,6 +294,14 @@ func ready_checks():
 	check_valid_target()
 	check_multiple_cameras()
 	set_g_advanced_cam_var()
+	setup_camera_noise()
+
+func setup_camera_noise():
+	camera_perlin_noise.set("noise_type",3)
+	camera_perlin_noise.set("seed",randi() % 1000 + 1)
+
+func sample_camera_noise(sample_position:Vector2) -> float:
+	return camera_perlin_noise.get_noise_2d(sample_position.x,sample_position.y)
 
 func set_g_advanced_cam_var():
 	G_Advanced_Cam.set("advanced_camera",self)
