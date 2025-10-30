@@ -3,12 +3,21 @@ class_name AdvancedCameraTarget extends Node2D
 
 ## Emitted when the camera has arrived this target
 @warning_ignore("unused_signal")
+signal all_actions_complete
 signal camera_at_target
 signal draw_camera_icon_changed(state:bool)
 const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 
+@export_storage var camera_action_ui:Dictionary[CameraAction,ACSprite2D]
+
+@export var camera_actions:Array[CameraAction]:
+	set(value):
+		camera_action_ui.clear()
+		camera_actions = value
+		call_deferred("setup_camera_actions")
+
 @export_tool_button("Force Update","Callable") var force_update = update_one_over_camera_zoom
-@export var target_function:G_Advanced_Cam.TARGET_FUNCTION = G_Advanced_Cam.TARGET_FUNCTION.MOVE_TO:
+@export var target_function:G_Advanced_Cam.CAMERA_ACTION = G_Advanced_Cam.CAMERA_ACTION.MOVE_TO:
 	get:
 		return target_function
 	set(value):
@@ -31,28 +40,6 @@ const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 @export var do_tween_camera_zoom:bool = false
 ## The speed that the camera will tween to desired zoom if do_tween_camera_zoom is true
 @export var camera_zoom_speed:float = 0.5
-## Contains values used if Target Function is set to "Move To"
-@export_subgroup("Move To")
-## Moves the camera by changing the camera target to this target
-@export var move_by_change_target:bool = false
-## Hold the camera until told otherwise, use this to hold the camera in a position until you have finished showing the player something.
-## You can see when the camera is at target area with the signal [signal AdvancedCameraTarget.camera_at_target].
-## Can be used in conjunction with hold_camera_for, camera will await move_camera_on then start the hold timer.
-## [codeblock]
-## func show_player_text()
-## display_story_function()
-## await text_finished
-## G_Advanced_Cam.move_camera_on.emit()
-## return
-@export var hold_camera_indefinitely:bool = false
-## Releases the camera assigning the target of the camera back to the default camera target
-@export var release_camera_back_to_default_after_hold:bool = true
-## How long the camera will take to reach the target, if camera speed is a positive value this will be ignored
-@export_range(0.0,100.0,0.1) var time_to_reach_target:float = 1.0
-## How long the camera will be held at location for before moving on
-@export_custom(PROPERTY_HINT_RANGE,"0.0,100.0,0.1,suffix:s") var hold_camera_for:float = 0.0
-## Which easing to use for the camera "Move To"
-@export var tween_easing:Tween.EaseType = Tween.EaseType.EASE_IN_OUT
 
 ## Contains values used if Target Function is set to "Stay In Area"
 @export_subgroup("Stay In Area")
@@ -134,7 +121,7 @@ var packed_array:PackedVector2Array
 func _draw() -> void:
 	if _draw_viewport_rect:
 		draw_viewport_rect()
-	if target_function == G_Advanced_Cam.TARGET_FUNCTION.STAY_IN_AREA:
+	if target_function == G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
 		draw_camera_bounds_rect()
 
 ## Draws the area the viewport will use, also draws the text above the box
@@ -211,6 +198,61 @@ func setup():
 	camera_line.add_point(target_parent.global_position,1)
 	for child in get_children():
 		child.set("self_modulate",self_modulate)
+
+func setup_camera_actions():
+	for action in camera_actions:
+		if action == null: continue
+		var new_acsprite2d:ACSprite2D = ACSprite2D.new()
+		add_child(new_acsprite2d)
+		new_acsprite2d.set_owner(get_tree().edited_scene_root)
+		action.request_icon.connect(new_acsprite2d.set_icon)
+		action.request_icon_visibility_change.connect(new_acsprite2d.set_visibilty)
+		action.request_color_change.connect(new_acsprite2d.set_color)
+		
+		camera_action_ui[action] = new_acsprite2d
+		
+		print("creation = " + str(camera_action_ui))
+		action.setup()
+	
+	var t_children = get_children()
+	var ui_values = camera_action_ui.values()
+	for t in t_children:
+		if t is ACSprite2D:
+			if !ui_values.has(t):
+				clear_camera_actiun_ui(t)
+
+func clear_camera_actiun_ui(acsprite:ACSprite2D):
+	for n in 20:
+		await get_tree().process_frame
+	acsprite.queue_free()
+
+func execute_actions():
+	for action in camera_actions:
+		if action.pre_wait > 0.0:
+			await get_tree().create_timer(action.pre_wait).timeout
+		match action.action_function:
+			G_Advanced_Cam.CAMERA_ACTION.MOVE_TO:
+				G_Advanced_Cam._move_to(self,action)
+		if action.hold_camera_until_move_camera_on_emitted:
+			await G_Advanced_Cam.move_camera_on
+		if action.post_wait > 0.0:
+			await get_tree().create_timer(action.post_wait).timeout
+	all_actions_complete.emit()
+
+func add_move_to_to_queue(action:CameraActionMoveTo):
+	G_Advanced_Cam._move_to(self,action)
+	await camera_at_target
+	if action.hold_camera_until_move_camera_on_emitted:
+		await G_Advanced_Cam.move_camera_on
+
+func update_action_icon(cam_action:CameraAction,_icon:CompressedTexture2D):
+	camera_action_ui[cam_action].icon = _icon
+
+func update_action_icon_visibility(cam_action:CameraAction,state:bool):
+	camera_action_ui[cam_action].do_draw_icon = state
+
+func update_action_color(cam_action:CameraAction,_color:Color):
+	camera_action_ui[cam_action].draw_color = _color
 
 func update_one_over_camera_zoom():
 	one_over_camera_zoom = Vector2(1.0/camera_zoom_at_target.x,1.0/camera_zoom_at_target.y)

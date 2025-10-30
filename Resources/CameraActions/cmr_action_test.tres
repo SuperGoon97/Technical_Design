@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="CameraAction" load_steps=2 format=3 uid="uid://nnbfo4mowqpk"]
+
+[ext_resource type="Script" uid="uid://dwopqhwp72dky" path="res://Resources/CameraActions/camera_action.gd" id="1_gdhv6"]
+
+[resource]
+script = ExtResource("1_gdhv6")
+metadata/_custom_type_script = "uid://dwopqhwp72dky"

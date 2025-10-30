@@ -2,6 +2,7 @@
 extends Node
 
 signal camera_function_complete
+@warning_ignore("unused_signal")
 signal move_camera_on
 
 enum FOLLOW_TYPE{
@@ -13,7 +14,7 @@ enum FOLLOW_TYPE{
 	LAG,
 }
 
-enum TARGET_FUNCTION{
+enum CAMERA_ACTION{
 	## Direcects camera to move to a position
 	MOVE_TO,
 	## Enforces bounds for the camera that it cannot leave
@@ -39,6 +40,8 @@ var advanced_camera:AdvancedCamera2D:
 
 var temp_advanced_camera:AdvancedCamera2D
 var camera_zoom_complete:bool = true
+
+
 
 ## Sets the camera follow type
 func set_camera_follow_type(type:FOLLOW_TYPE):
@@ -170,21 +173,17 @@ func _get_temp_advanced_cam():
 	return get_tree().get_first_node_in_group("AdvancedCamera2D")
 
 ## Camera target move to logic
-func _move_to(target:AdvancedCameraTarget):
+func _move_to(target:AdvancedCameraTarget,action:CameraActionMoveTo):
 	print("move to")
-	if target.move_by_change_target:
-		set_camera_target(target)
-	else:
-		tween_camera_to_target(target,target.time_to_reach_target,target.tween_easing)
+	match action.move_by:
+		action.MOVE_BY.TWEEN:
+			tween_camera_to_target(target,action.twn_time_to_reach_target,action.twn_tween_easing)
+		action.MOVE_BY.CHANGE_TARGET:
+			set_camera_target(target)
+	
 	await advanced_camera.camera_arrived_at_target
 	target.camera_at_target.emit()
-	if target.hold_camera_indefinitely:
-		await move_camera_on
-	if target.hold_camera_for > 0.0:
-		await get_tree().create_timer(target.hold_camera_for).timeout
-	if target.release_camera_back_to_default_after_hold:
-		set_camera_to_default()
-	return
+
 
 ## Camera target stay in area logic
 func _stay_in_area(target:AdvancedCameraTarget):
@@ -219,18 +218,19 @@ func _zoom(target:AdvancedCameraTarget):
 	advanced_camera.change_camera_zoom(target.camera_zoom_at_target,target.do_tween_camera_zoom,target.camera_zoom_speed)
 
 func execute_target_function(target:AdvancedCameraTarget):
-	var move_type:TARGET_FUNCTION = target.target_function
+	var move_type:CAMERA_ACTION = target.target_function
 	if target.camera_zoom_at_target != advanced_camera.zoom:
 		camera_zoom_complete = false
 		_zoom(target)
 	match move_type:
-		TARGET_FUNCTION.MOVE_TO:
-			await _move_to(target)
-		TARGET_FUNCTION.STAY_IN_AREA:
+		CAMERA_ACTION.MOVE_TO:
+			return
+			##await _move_to(target)
+		CAMERA_ACTION.STAY_IN_AREA:
 			_stay_in_area(target)
-		TARGET_FUNCTION.MULTI_TARGET:
+		CAMERA_ACTION.MULTI_TARGET:
 			_multi_target(target)
-		TARGET_FUNCTION.SHAKE:
+		CAMERA_ACTION.SHAKE:
 			_shake(target)
 	while camera_zoom_complete == false:
 		await get_tree().process_frame

@@ -69,5 +69,5 @@ func _on_area_entered(area: Area2D) -> void:
 
 func execute_camera_area_targets():
 	for target in area_targets:
-		G_Advanced_Cam.execute_target_function(target)
-		await G_Advanced_Cam.camera_function_complete
+		target.execute_actions()
+		await target.all_actions_complete
