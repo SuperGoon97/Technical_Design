@@ -222,8 +222,7 @@ func setup_camera_actions():
 				clear_camera_actiun_ui(t)
 
 func clear_camera_actiun_ui(acsprite:ACSprite2D):
-	for n in 20:
-		await get_tree().process_frame
+	await get_tree().create_timer(1.0).timeout
 	acsprite.queue_free()
 
 func execute_actions():
