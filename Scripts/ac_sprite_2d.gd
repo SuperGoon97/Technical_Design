@@ -16,20 +16,16 @@ func set_color(color:Color):
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():
-		if viewport == null:
-			viewport = get_viewport()
 		update_scale()
 
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		visible = true
-	else:
-		visible = false
-
-	if Engine.is_editor_hint():
 		if viewport == null:
 			viewport = get_viewport()
 		update_scale()
+	else:
+		visible = false
 
 func update_scale():
 	if viewport == null:

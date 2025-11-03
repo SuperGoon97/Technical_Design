@@ -7,6 +7,7 @@ enum MOVE_BY{
 	TWEEN,
 	CHANGE_TARGET,
 }
+@export var await_complete:bool = true
 @export var move_by:MOVE_BY = MOVE_BY.TWEEN
 @export_group("Tween","twn_")
 @export_range(0.0,100.0,0.1) var twn_time_to_reach_target:float = 1.0

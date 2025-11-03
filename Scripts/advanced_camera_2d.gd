@@ -3,6 +3,7 @@ class_name AdvancedCamera2D extends Camera2D
 
 
 signal camera_arrived_at_target(target:Node2D)
+signal camera_arrived_at_pos
 signal camera_zoom_change_complete()
 signal camera_shake_complete()
 
@@ -141,6 +142,17 @@ func tween_to_target(target:Node2D = camera_default_target,time_to_reach_target:
 	current_tween.tween_property(self,"global_position",tween_target.global_position,time_to_reach_target)
 	await current_tween.finished
 	camera_arrived_at_target.emit(target)
+	camera_moving_to = false
+
+func tween_to_target_position(pos:Vector2,time_to_reach_target:float = 0.5,tween_easing_type:Tween.EaseType = Tween.EaseType.EASE_IN):
+	kill_tween()
+	camera_moving_to = true
+	current_tween = get_tree().create_tween()
+	current_tween.set_ease(tween_easing_type)
+	current_tween.tween_property(self,"global_position",pos,time_to_reach_target)
+	await current_tween.finished
+	camera_arrived_at_pos.emit()
+	camera_moving_to = false
 
 # NOT IMPLEMENTED - Maybe implemented in future
 #func move_camera_until_at_target(target:Node2D,camera_max_speed:float,camera_acceleration_speed:float,allow_overshoot:bool,camera_distance_tolerance:float = 1.0):
@@ -265,13 +277,16 @@ func add_camera_shake(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:f
 	camera_shake_y = shake_y
 	camera_shake_indefinitely = camera_shake_indef
 
-func change_camera_zoom(new_zoom:Vector2,do_tween:bool = false,time_to_reach_zoom:float = 0.5):
-	if !do_tween:
-		zoom = new_zoom
-		return
-	var zoom_tween:Tween = create_tween()
-	zoom_tween.tween_property(self,"zoom",new_zoom,time_to_reach_zoom)
-	await zoom_tween.finished
+func change_camera_zoom(new_zoom:Vector2,zoom_type:CameraActionZoom.ZOOM_TYPE,time_to_reach_zoom:float = 0.5):
+	match zoom_type:
+		CameraActionZoom.ZOOM_TYPE.SET:
+			zoom = new_zoom
+		CameraActionZoom.ZOOM_TYPE.TWEEN:
+			var zoom_tween:Tween = create_tween()
+			zoom_tween.tween_property(self,"zoom",new_zoom,time_to_reach_zoom)
+			await zoom_tween.finished
+	
+	await get_tree().process_frame
 	camera_zoom_change_complete.emit()
 
 func camera_shake():

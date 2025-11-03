@@ -7,7 +7,6 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 @export_tool_button("Create Area Target","Callable") var create_target_action = create_target
 @export_tool_button("Remove Last Area Target","Callable") var remove_last_target_action = remove_last_target
 
-@export var is_camera_release_area:bool
 @export var is_one_shot:bool = false
 
 @export_category("AreaDefaults")
@@ -59,9 +58,6 @@ func _on_area_entered(area: Area2D) -> void:
 	if has_activated == false:
 		var advanced_camera_area_2d := area as AdvancedCameraArea2D
 		if advanced_camera_area_2d and area.is_player_area:
-			if is_camera_release_area == true: 
-				G_Advanced_Cam.set_camera_to_default()
-				return
 			if area_targets.size() > 0:
 				execute_camera_area_targets()
 		if is_one_shot:

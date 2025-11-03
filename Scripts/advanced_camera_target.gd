@@ -4,6 +4,7 @@ class_name AdvancedCameraTarget extends Node2D
 ## Emitted when the camera has arrived this target
 @warning_ignore("unused_signal")
 signal all_actions_complete
+@warning_ignore("unused_signal")
 signal camera_at_target
 signal draw_camera_icon_changed(state:bool)
 const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
@@ -12,17 +13,13 @@ const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 
 @export var camera_actions:Array[CameraAction]:
 	set(value):
-		camera_action_ui.clear()
+		if Engine.is_editor_hint():
+			camera_action_ui.clear()
+			call_deferred("setup_camera_actions")
 		camera_actions = value
-		call_deferred("setup_camera_actions")
 
-@export_tool_button("Force Update","Callable") var force_update = update_one_over_camera_zoom
-@export var target_function:G_Advanced_Cam.CAMERA_ACTION = G_Advanced_Cam.CAMERA_ACTION.MOVE_TO:
-	get:
-		return target_function
-	set(value):
-		target_function = value
 @export var _draw_viewport_rect:bool = true
+@export var _draw_bounds:bool = true
 @export var _draw_camera_icon:bool = true:
 	get:
 		return _draw_camera_icon
@@ -30,40 +27,6 @@ const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 		draw_camera_icon_changed.emit(value)
 		_draw_camera_icon = value
 @export var _draw_color:Color = Color.WHITE
-@export_custom(PROPERTY_HINT_LINK,"") var camera_zoom_at_target:Vector2 = Vector2(1.0,1.0):
-	get:
-		return camera_zoom_at_target
-	set(value):
-		update_one_over_camera_zoom()
-		camera_zoom_at_target = value
-## Changes if the camera will tween to the desired zoom or snap to the desired zoom
-@export var do_tween_camera_zoom:bool = false
-## The speed that the camera will tween to desired zoom if do_tween_camera_zoom is true
-@export var camera_zoom_speed:float = 0.5
-
-## Contains values used if Target Function is set to "Stay In Area"
-@export_subgroup("Stay In Area")
-## Controls the north bound for the camera
-@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var north_bound:float = 0.0:
-	set(value):
-		north_bound = value
-		update_packed_bound_array()
-## Controls the south bound for the camera
-@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var south_bound:float = 0.0:
-	set(value):
-		south_bound = value
-		update_packed_bound_array()
-## Controls the east bound for the camera
-@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var east_bound:float = 0.0:
-	set(value):
-		east_bound = value
-		update_packed_bound_array()
-## Controls the west bound for the camera
-@export_range(0.0,100.0,1.0,"or_greater","hide_slider") var west_bound:float = 0.0:
-	set(value):
-		west_bound = value
-		update_packed_bound_array()
-@export var teleport_camera_to_nearest_point_in_bounds:bool = false
 
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
@@ -71,13 +34,19 @@ var one_over_camera_zoom:Vector2
 var screen_position:Vector2
 var half_viewport_x:float
 var half_viewport_y:float
+var has_zoom_action:bool = false
+var zoom_action:CameraActionZoom = null
+var zoom:Vector2 = Vector2(1.0,1.0)
+var has_bounds_action:bool = false
+var bounds_action:CameraActionBounds = null
 var packed_array:PackedVector2Array
 
 func _draw() -> void:
-	if _draw_viewport_rect:
-		draw_viewport_rect()
-	if target_function == G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
-		draw_camera_bounds_rect()
+	if Engine.is_editor_hint():
+		if _draw_viewport_rect && has_zoom_action:
+			draw_viewport_rect()
+		if _draw_bounds && has_bounds_action:
+			draw_camera_bounds_rect()
 
 ## Draws the area the viewport will use, also draws the text above the box
 func draw_viewport_rect():
@@ -86,7 +55,7 @@ func draw_viewport_rect():
 		half_viewport_y = (ProjectSettings.get_setting("display/window/size/viewport_height"))/2.0
 	
 	if !one_over_camera_zoom:
-		update_one_over_camera_zoom()
+		update_action_zoom()
 	
 	var dx = Vector2(half_viewport_x*one_over_camera_zoom.x,half_viewport_y*one_over_camera_zoom.y)
 	var dxx = Vector2(-half_viewport_x*one_over_camera_zoom.x,half_viewport_y*one_over_camera_zoom.y)
@@ -110,39 +79,6 @@ func draw_camera_bounds_rect():
 	draw_line(packed_array[2],packed_array[0],_draw_color)
 	draw_line(packed_array[3],packed_array[1],_draw_color)
 
-## Creates bounds as a PackedVector2Array [0]NE [1]SE [2]NW [3]SW
-func create_bounds()-> PackedVector2Array:
-	var return_packed_array:PackedVector2Array = PackedVector2Array([Vector2(east_bound,-north_bound),Vector2(east_bound,south_bound),Vector2(-west_bound,-north_bound),Vector2(-west_bound,south_bound)])
-	return return_packed_array
-
-## Gets global bounds as a PackedVector2Array [0]NE [1]SE [2]NW [3]SW
-func get_global_bounds() -> PackedVector2Array:
-	var local_bounds:PackedVector2Array = create_bounds()
-	var return_packed_array:PackedVector2Array
-	for vector in local_bounds:
-		var global_vec = Vector2(vector.x+global_position.x,vector.y+global_position.y)
-		return_packed_array.append(global_vec)
-	return return_packed_array
-
-func get_closest_point_within_bounds(pos:Vector2) -> PackedVector2Array:
-	var g_bounds:PackedVector2Array = get_global_bounds()
-	var vec1:Vector2 = Vector2(0.0,0.0)
-	var vec2:Vector2 = Vector2(0.0,0.0)
-	if pos.x < g_bounds[2].x:
-		vec1 = g_bounds[2]
-		vec2 = g_bounds[3]
-	elif pos.x > g_bounds[0].x:
-		vec1 = g_bounds[0]
-		vec2 = g_bounds[1]
-	elif pos.y > g_bounds[1].y:
-		vec1 = g_bounds[1]
-		vec2 = g_bounds[3]
-	elif pos.y < g_bounds[0].y:
-		vec1 = g_bounds[2]
-		vec2 = g_bounds[0]
-	var intersect_point:PackedVector2Array = Geometry2D.get_closest_points_between_segments(vec1,vec2,pos,global_position)
-	return intersect_point
-
 ## Creates the tool line 2d and adds it as a child (could also use a viewport draw instead)
 func setup():
 	camera_line = ToolLine2D.new()
@@ -155,20 +91,36 @@ func setup():
 		child.set("self_modulate",self_modulate)
 
 func setup_camera_actions():
+	has_zoom_action = false
+	has_bounds_action = false
+	var n: int = camera_actions.size()
+	var spacing:float = 100.0
+	var i:int = 0
 	for action in camera_actions:
 		if action == null: continue
+		if action.action_function == G_Advanced_Cam.CAMERA_ACTION.ZOOM:
+			has_zoom_action = true
+			zoom_action = action
+			if !zoom_action.request_zoom_changed.is_connected(update_action_zoom):
+				zoom_action.request_zoom_changed.connect(update_action_zoom)
+		if action.action_function == G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
+			has_bounds_action = true
+			bounds_action = action
+			if !bounds_action.request_bounds_changed.is_connected(update_packed_bound_array):
+				bounds_action.request_bounds_changed.connect(update_packed_bound_array)
+
 		var new_acsprite2d:ACSprite2D = ACSprite2D.new()
 		add_child(new_acsprite2d)
 		new_acsprite2d.name = action.get_script().get_global_name()
+		new_acsprite2d.position = Vector2(spacing * (1.0 - n / 2.0 + i),0.0)
 		new_acsprite2d.set_owner(get_tree().edited_scene_root)
 		action.request_icon.connect(new_acsprite2d.set_icon)
 		action.request_icon_visibility_change.connect(new_acsprite2d.set_visibilty)
 		action.request_color_change.connect(new_acsprite2d.set_color)
 		
 		camera_action_ui[action] = new_acsprite2d
-		
-		print("creation = " + str(camera_action_ui))
 		action.setup()
+		i += 1
 	
 	var t_children = get_children()
 	var ui_values = camera_action_ui.values()
@@ -194,17 +146,16 @@ func execute_actions():
 				G_Advanced_Cam.set_camera_to_default()
 			G_Advanced_Cam.CAMERA_ACTION.MULTI_TARGET:
 				G_Advanced_Cam._multi_target(self,action)
+			G_Advanced_Cam.CAMERA_ACTION.ZOOM:
+				G_Advanced_Cam._zoom(action)
+			G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
+				G_Advanced_Cam._stay_in_area(self,action)
+		await G_Advanced_Cam.camera_function_complete
 		if action.hold_camera_until_move_camera_on_emitted:
 			await G_Advanced_Cam.move_camera_on
 		if action.post_wait > 0.0:
 			await get_tree().create_timer(action.post_wait).timeout
 	all_actions_complete.emit()
-
-func add_move_to_to_queue(action:CameraActionMoveTo):
-	G_Advanced_Cam._move_to(self,action)
-	await camera_at_target
-	if action.hold_camera_until_move_camera_on_emitted:
-		await G_Advanced_Cam.move_camera_on
 
 func update_action_icon(cam_action:CameraAction,_icon:CompressedTexture2D):
 	camera_action_ui[cam_action].icon = _icon
@@ -215,11 +166,12 @@ func update_action_icon_visibility(cam_action:CameraAction,state:bool):
 func update_action_color(cam_action:CameraAction,_color:Color):
 	camera_action_ui[cam_action].draw_color = _color
 
-func update_one_over_camera_zoom():
-	one_over_camera_zoom = Vector2(1.0/camera_zoom_at_target.x,1.0/camera_zoom_at_target.y)
-
 func update_packed_bound_array():
-	packed_array = create_bounds()
+	packed_array = G_Advanced_Cam.make_global_bounds(Vector2(0.0,0.0),bounds_action.get_bounds())
+
+func update_action_zoom():
+	zoom = zoom_action.camera_zoom_at_target
+	one_over_camera_zoom = Vector2(1.0/zoom.x,1.0/zoom.y)
 
 func _process(_delta: float) -> void:
 	if Engine.is_editor_hint():

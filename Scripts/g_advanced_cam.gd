@@ -25,6 +25,8 @@ enum CAMERA_ACTION{
 	SHAKE,
 	## Releases camera to default target
 	RELEASE,
+	## Zooms the camera to desired size
+	ZOOM,
 }
 
 enum MOVE_TO_TYPE{
@@ -42,8 +44,6 @@ var advanced_camera:AdvancedCamera2D:
 
 var temp_advanced_camera:AdvancedCamera2D
 var camera_zoom_complete:bool = true
-
-
 
 ## Sets the camera follow type
 func set_camera_follow_type(type:FOLLOW_TYPE):
@@ -150,7 +150,6 @@ func set_camera_shake_indefinitely(value:bool):
 ## Tweens the camera to target
 func tween_camera_to_target(target:Node2D,time_to_reach_target:float = 0.5,tween_easing:Tween.EaseType = Tween.EaseType.EASE_IN):
 	if advanced_camera:
-		set_camera_target(target)
 		advanced_camera.call("tween_to_target",target,time_to_reach_target,tween_easing)
 
 ## Shakes the camera
@@ -162,11 +161,40 @@ func shake_camera(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:float
 func set_camera_to_default():
 	if advanced_camera:
 		advanced_camera.call("camera_to_default")
+		await get_tree().process_frame
+		camera_function_complete.emit()
 
 ## Forces the camera to a Vector2 position, camera will not stay there
 func force_camera_to_vector(vec:Vector2):
 	if advanced_camera:
 		advanced_camera.call("force_to_vector",vec)
+
+func make_global_bounds(g_pos:Vector2,bounds:PackedVector2Array) -> PackedVector2Array:
+	var return_packed_array:PackedVector2Array
+	for vector in bounds:
+		var global_vec = Vector2(vector.x + g_pos.x,vector.y + g_pos.y)
+		return_packed_array.append(global_vec)
+	return return_packed_array
+
+func get_closest_point_within_bounds(target:AdvancedCameraTarget,action:CameraActionBounds) -> PackedVector2Array:
+	var cam_pos = get_camera_target().global_position
+	var g_bounds:PackedVector2Array = make_global_bounds(target.global_position,action.get_bounds())
+	var vec1:Vector2 = Vector2(0.0,0.0)
+	var vec2:Vector2 = Vector2(0.0,0.0)
+	if cam_pos.x < g_bounds[2].x:
+		vec1 = g_bounds[2]
+		vec2 = g_bounds[3]
+	elif cam_pos.x > g_bounds[0].x:
+		vec1 = g_bounds[0]
+		vec2 = g_bounds[1]
+	elif cam_pos.y > g_bounds[1].y:
+		vec1 = g_bounds[1]
+		vec2 = g_bounds[3]
+	elif cam_pos.y < g_bounds[0].y:
+		vec1 = g_bounds[2]
+		vec2 = g_bounds[0]
+	var intersect_point:PackedVector2Array = Geometry2D.get_closest_points_between_segments(vec1,vec2,cam_pos,target.global_position)
+	return intersect_point
 
 ## Gets advanced cam for use in @tool scripts
 func _get_temp_advanced_cam():
@@ -174,26 +202,34 @@ func _get_temp_advanced_cam():
 
 ## Camera target move to logic
 func _move_to(target:AdvancedCameraTarget,action:CameraActionMoveTo):
-	print("move to")
 	match action.move_by:
 		action.MOVE_BY.TWEEN:
 			tween_camera_to_target(target,action.twn_time_to_reach_target,action.twn_tween_easing)
 		action.MOVE_BY.CHANGE_TARGET:
 			set_camera_target(target)
-	
-	await advanced_camera.camera_arrived_at_target
+	if action.await_complete:
+		await advanced_camera.camera_arrived_at_target
 	target.camera_at_target.emit()
-	print("attarget")
-
+	await get_tree().process_frame
+	camera_function_complete.emit()
 
 ## Camera target stay in area logic
-func _stay_in_area(target:AdvancedCameraTarget):
-	set_camera_bounds(target.get_global_bounds())
-	set_camera_is_bound(true)
-	if target.teleport_camera_to_nearest_point_in_bounds:
-		var vec_array:PackedVector2Array = target.get_closest_point_within_bounds(get_camera_target().global_position)
-		force_camera_to_vector(vec_array[0])
-	return
+func _stay_in_area(target:AdvancedCameraTarget,action:CameraActionBounds):
+	set_camera_bounds(make_global_bounds(target.global_position,action.get_bounds()))
+	set_camera_is_bound(action.bind_camera)
+	var intersection_point = get_closest_point_within_bounds(target,action)
+	match action.move_camera_to_closest_point:
+		action.CLOSEST_POINT_TYPE.NONE:
+			pass
+		action.CLOSEST_POINT_TYPE.SNAP:
+			force_camera_to_vector(intersection_point[0])
+		action.CLOSEST_POINT_TYPE.TWEEN:
+			print("skib")
+			advanced_camera.tween_to_target_position(intersection_point[0],action.twn_time_to_reach_target,action.twn_tween_easing)
+			if action.await_complete:
+				await advanced_camera.camera_arrived_at_pos
+	await get_tree().process_frame
+	camera_function_complete.emit()
 
 ## Camera target multi target logic
 func _multi_target(target:AdvancedCameraTarget,action:CameraActionMultiTarget):
@@ -203,6 +239,8 @@ func _multi_target(target:AdvancedCameraTarget,action:CameraActionMultiTarget):
 			add_camera_multi_targets(target, action.multi_target_weight)
 		action.MULTI_TARGET_MODE.REMOVE:
 			remove_camera_multi_target(target)
+	await get_tree().process_frame
+	camera_function_complete.emit()
 
 ## Camera target shake logic 
 func _shake(action:CameraActionShake):
@@ -214,15 +252,20 @@ func _shake(action:CameraActionShake):
 			shake_camera(action.strength,action.strength_power,action.decay,action.shake_x,action.shake_y,action.shake_indefinitely,true)
 		action.SHAKE_MODE.SET:
 			shake_camera(action.strength,action.strength_power,action.decay,action.shake_x,action.shake_y,action.shake_indefinitely,false)
+	await get_tree().process_frame
+	camera_function_complete.emit()
 
-func _zoom(target:AdvancedCameraTarget):
-	advanced_camera.change_camera_zoom(target.camera_zoom_at_target,target.do_tween_camera_zoom,target.camera_zoom_speed)
+func _zoom(action:CameraActionZoom):
+	advanced_camera.change_camera_zoom(action.camera_zoom_at_target,action.zoom_type,action.time_to_reach_zoom)
+	if action.await_complete:
+		await advanced_camera.camera_zoom_change_complete
+	camera_function_complete.emit.call_deferred()
 
 func execute_target_function(target:AdvancedCameraTarget):
 	var move_type:CAMERA_ACTION = target.target_function
 	if target.camera_zoom_at_target != advanced_camera.zoom:
 		camera_zoom_complete = false
-		_zoom(target)
+		##_zoom(target)
 	match move_type:
 		CAMERA_ACTION.MOVE_TO:
 			return
