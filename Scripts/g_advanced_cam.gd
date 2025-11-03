@@ -23,6 +23,8 @@ enum CAMERA_ACTION{
 	MULTI_TARGET,
 	## Directs the camera to shake
 	SHAKE,
+	## Releases camera to default target
+	RELEASE,
 }
 
 enum MOVE_TO_TYPE{
@@ -125,16 +127,14 @@ func get_camera_multi_target_mode() -> bool:
 		return advanced_camera.camera_use_multi_target
 	else: return false
 
-## Sets the camera multi targets
-func set_camera_multi_targets(dict:Dictionary[Node2D,float]):
-	if advanced_camera:
-		advanced_camera.set("camera_multi_targets",dict)
-
 ## Adds camera multi targets. Note does not allow duplicates
-func add_camera_multi_targets(dict:Dictionary[Node2D,float]):
+func add_camera_multi_targets(target:Node2D,weight:float):
 	if advanced_camera:
-		for key in dict:
-			advanced_camera.call("add_camera_multi_target",key,dict[key])
+		advanced_camera.add_camera_multi_target(target,weight)
+
+func remove_camera_multi_target(target:Node2D):
+	if advanced_camera:
+		advanced_camera.remove_camera_multi_target(target)
 
 ## Gets the camera shake indefinitely state on the camera
 func get_camera_shake_indefinitely() -> bool:
@@ -183,6 +183,7 @@ func _move_to(target:AdvancedCameraTarget,action:CameraActionMoveTo):
 	
 	await advanced_camera.camera_arrived_at_target
 	target.camera_at_target.emit()
+	print("attarget")
 
 
 ## Camera target stay in area logic
@@ -195,24 +196,24 @@ func _stay_in_area(target:AdvancedCameraTarget):
 	return
 
 ## Camera target multi target logic
-func _multi_target(target:AdvancedCameraTarget):
-	set_camera_multi_target_mode(target.camera_use_multi_target)
-	match target.multi_target_mode:
-		target.MULTI_TARGET_MODE.ADD:
-			add_camera_multi_targets(target.multi_targets)
-		target.MULTI_TARGET_MODE.SET:
-			set_camera_multi_targets(target.multi_targets)
+func _multi_target(target:AdvancedCameraTarget,action:CameraActionMultiTarget):
+	set_camera_multi_target_mode(action.camera_use_multi_target)
+	match action.multi_target_mode:
+		action.MULTI_TARGET_MODE.ADD:
+			add_camera_multi_targets(target, action.multi_target_weight)
+		action.MULTI_TARGET_MODE.REMOVE:
+			remove_camera_multi_target(target)
 
 ## Camera target shake logic 
-func _shake(target:AdvancedCameraTarget):
-	if target.stop_shake:
+func _shake(action:CameraActionShake):
+	if action.stop_shake:
 		set_camera_shake_indefinitely(false)
 		return
-	match target.strength_mode:
-		target.STRENGTH_MODE.ADD:
-			shake_camera(target.strength,target.strength_power,target.decay,target.shake_x,target.shake_y,target.shake_indefinitely,true)
-		target.STRENGTH_MODE.SET:
-			shake_camera(target.strength,target.strength_power,target.decay,target.shake_x,target.shake_y,target.shake_indefinitely,false)
+	match action.shake_mode:
+		action.SHAKE_MODE.ADD:
+			shake_camera(action.strength,action.strength_power,action.decay,action.shake_x,action.shake_y,action.shake_indefinitely,true)
+		action.SHAKE_MODE.SET:
+			shake_camera(action.strength,action.strength_power,action.decay,action.shake_x,action.shake_y,action.shake_indefinitely,false)
 
 func _zoom(target:AdvancedCameraTarget):
 	advanced_camera.change_camera_zoom(target.camera_zoom_at_target,target.do_tween_camera_zoom,target.camera_zoom_speed)
@@ -227,11 +228,14 @@ func execute_target_function(target:AdvancedCameraTarget):
 			return
 			##await _move_to(target)
 		CAMERA_ACTION.STAY_IN_AREA:
-			_stay_in_area(target)
+			return
+			##_stay_in_area(target)
 		CAMERA_ACTION.MULTI_TARGET:
-			_multi_target(target)
+			return
+			##_multi_target(target)
 		CAMERA_ACTION.SHAKE:
-			_shake(target)
+			return
+			##_shake(target)
 	while camera_zoom_complete == false:
 		await get_tree().process_frame
 	camera_function_complete.emit()

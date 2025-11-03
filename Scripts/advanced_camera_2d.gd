@@ -250,6 +250,10 @@ func add_camera_multi_target(target:Node2D,weight:float = 1.0):
 	print("add")
 	camera_multi_targets[target] = weight
 
+func remove_camera_multi_target(target:Node2D):
+	if camera_multi_targets.has(target):
+		camera_multi_targets.erase(target)
+
 func add_camera_shake(strength:float = 2.0,strength_pow:float = 2.0,decay_rate:float = 0.5,shake_x:bool = true ,shake_y:bool = true,camera_shake_indef:bool = false,add_strength:bool = true):
 	if add_strength:
 		camera_shake_strength += strength

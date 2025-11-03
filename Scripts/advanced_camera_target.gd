@@ -65,50 +65,6 @@ const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 		update_packed_bound_array()
 @export var teleport_camera_to_nearest_point_in_bounds:bool = false
 
-enum MULTI_TARGET_MODE{
-	## Adds the multi target dict to current camera multi targets
-	ADD,
-	## Sets the cameras multi target dict to this
-	SET,
-}
-@export_subgroup("Multi Target")
-## Changes if multi target mode should be used by the camera
-@export var camera_use_multi_target:bool = true
-## Changes how the multi target dict is used, see ENUM for uses
-@export var multi_target_mode:MULTI_TARGET_MODE = MULTI_TARGET_MODE.ADD
-## Multi target dict with Node2D targets and float weights, weights are used to indicate how much pull the target should have on the camera
-@export var multi_targets:Dictionary[Node2D,float] = {}
-
-enum STRENGTH_MODE{
-	## Adds strength to the current camera shake strength
-	ADD,
-	## Sets the cameras shake strength
-	SET,
-}
-@export_subgroup("Shake")
-## If true the camera will be told to stop shaking indefinitely, the rest of the properties are ignored from this action
-@export var stop_shake:bool = false
-## Amplitude is the base for the shake
-@export_range(0.0,100.0,1.0,"or_greater") var amplitude:float = 40.0
-## Changes if strength will be added or set, adding strength can get very shakey very quickly. Note all other properties are treat as set
-@export var strength_mode:STRENGTH_MODE = STRENGTH_MODE.SET
-## Strength is the multiplier for the amplitude, it decays as the shake progresses
-@export_range(1.0,10.0,0.1,"or_greater") var strength:float = 1.0
-## Strength power is the amount strengh is pow() by
-## [codeblock]
-## func _foo() -> float:
-## var strength:float = 1.0
-## var strength_pow:float = 2.0
-## return pow(strength,strength_pow)
-@export_range(1.0,4.0,0.1,"or_greater") var strength_power:float = 2.0
-## Decay changes the amount strength is decreased by, higher decay means the camera will come to a stop quicker. If you want the camera to shake indefintely use the "shake indefinitely" bool
-@export_range(0.1,10.0,0.1,"or_less","or_greater") var decay:float = 0.5
-## Changes if the shake will move the camera on the x axis
-@export var shake_x:bool = true
-## Changes if the shake will move the camera on the y axis
-@export var shake_y:bool = true
-## Makes it so the strength will never decay until stop shake is used
-@export var shake_indefinitely:bool = false
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
 @export_custom(PROPERTY_HINT_NODE_TYPE,"Node2D",PROPERTY_USAGE_STORAGE) var target_parent:Node2D
@@ -116,7 +72,6 @@ var screen_position:Vector2
 var half_viewport_x:float
 var half_viewport_y:float
 var packed_array:PackedVector2Array
-
 
 func _draw() -> void:
 	if _draw_viewport_rect:
@@ -204,6 +159,7 @@ func setup_camera_actions():
 		if action == null: continue
 		var new_acsprite2d:ACSprite2D = ACSprite2D.new()
 		add_child(new_acsprite2d)
+		new_acsprite2d.name = action.get_script().get_global_name()
 		new_acsprite2d.set_owner(get_tree().edited_scene_root)
 		action.request_icon.connect(new_acsprite2d.set_icon)
 		action.request_icon_visibility_change.connect(new_acsprite2d.set_visibilty)
@@ -232,6 +188,12 @@ func execute_actions():
 		match action.action_function:
 			G_Advanced_Cam.CAMERA_ACTION.MOVE_TO:
 				G_Advanced_Cam._move_to(self,action)
+			G_Advanced_Cam.CAMERA_ACTION.SHAKE:
+				G_Advanced_Cam._shake(action)
+			G_Advanced_Cam.CAMERA_ACTION.RELEASE:
+				G_Advanced_Cam.set_camera_to_default()
+			G_Advanced_Cam.CAMERA_ACTION.MULTI_TARGET:
+				G_Advanced_Cam._multi_target(self,action)
 		if action.hold_camera_until_move_camera_on_emitted:
 			await G_Advanced_Cam.move_camera_on
 		if action.post_wait > 0.0:
