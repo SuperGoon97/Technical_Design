@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://dvjgqdaecrw8v"]
+[gd_scene load_steps=21 format=4 uid="uid://dvjgqdaecrw8v"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
@@ -7,7 +7,6 @@
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://Scenes/AdvancedCam/advanced_camera_area_2d.tscn" id="5_6x818"]
 [ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Scenes/AdvancedCam/advanced_camera_target.tscn" id="7_cpp2d"]
-[ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://Scenes/Utility/fps_counter.tscn" id="8_ljryr"]
 [ext_resource type="Script" uid="uid://dwopqhwp72dky" path="res://Resources/CameraActions/camera_action.gd" id="9_qanxj"]
 [ext_resource type="Script" uid="uid://bwypcw7m0swym" path="res://Scripts/ac_sprite_2d.gd" id="10_wstln"]
 [ext_resource type="Script" uid="uid://cx8beh7nb81fu" path="res://Resources/CameraActions/camera_action_shake.gd" id="11_cpp2d"]
@@ -505,26 +504,6 @@ editor_draw_limits = true
 camera_default_target = NodePath("../Gad2010Character")
 camera_default_follow_type = 2
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Core/AdvancedCamera2D"]
-
-[node name="Control" type="Control" parent="Core/AdvancedCamera2D/CanvasLayer"]
-z_index = 11
-z_as_relative = false
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="DebugFpsCounter" parent="Core/AdvancedCamera2D/CanvasLayer/Control" instance=ExtResource("8_ljryr")]
-layout_mode = 1
-offset_right = 80.0
-offset_bottom = 23.0
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 4
-
 [node name="advanced_camera_area2D" parent="Core" node_paths=PackedStringArray("area_targets") instance=ExtResource("5_6x818")]
 position = Vector2(-72, -72)
 is_one_shot = true
@@ -535,36 +514,57 @@ area_targets = [NodePath("AdvancedCameraTarget 0")]
 self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
 position = Vector2(556, 2)
 camera_action_ui = Dictionary[ExtResource("9_qanxj"), ExtResource("10_wstln")]({
-SubResource("Resource_qanxj"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(-50, 0),"rotation":0.0,"scale":Vector2(0.45454544, 0.45454544),"skew":0.0,"texture":SubResource("CompressedTexture2D_duh7i"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1514, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
+SubResource("Resource_qanxj"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(-50, 0),"rotation":0.0,"scale":Vector2(0.73205006, 0.73205006),"skew":0.0,"texture":SubResource("CompressedTexture2D_duh7i"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1996, 1199),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
 )
 ,
-SubResource("Resource_wstln"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(0.36862746, 0.27058825, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(50, 0),"rotation":0.0,"scale":Vector2(0.45454544, 0.45454544),"skew":0.0,"texture":SubResource("CompressedTexture2D_qanxj"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1514, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
+SubResource("Resource_wstln"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(0.36862746, 0.27058825, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(50, 0),"rotation":0.0,"scale":Vector2(0.73205006, 0.73205006),"skew":0.0,"texture":SubResource("CompressedTexture2D_qanxj"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1996, 1199),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
 )
 ,
-SubResource("Resource_ly22g"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(0.36078432, 0.16862746, 0.44705883, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(150, 0),"rotation":0.0,"scale":Vector2(0.45454544, 0.45454544),"skew":0.0,"texture":SubResource("CompressedTexture2D_lkdl0"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1514, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
+SubResource("Resource_ly22g"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(0.36078432, 0.16862746, 0.44705883, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(150, 0),"rotation":0.0,"scale":Vector2(0.73205006, 0.73205006),"skew":0.0,"texture":SubResource("CompressedTexture2D_lkdl0"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("10_wstln"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1996, 1199),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":4,"script":null)
 )
 
 })
 camera_actions = Array[ExtResource("9_qanxj")]([SubResource("Resource_qanxj"), SubResource("Resource_wstln"), SubResource("Resource_ly22g")])
 target_parent = NodePath("..")
 
+[node name="CameraActionBounds" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
+self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
+position = Vector2(-50, 0)
+scale = Vector2(0.73205006, 0.73205006)
+texture = SubResource("CompressedTexture2D_duh7i")
+script = ExtResource("10_wstln")
+
+[node name="CameraActionShake" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
+self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
+position = Vector2(50, 0)
+scale = Vector2(0.73205006, 0.73205006)
+texture = SubResource("CompressedTexture2D_qanxj")
+script = ExtResource("10_wstln")
+
+[node name="CameraActionZoom" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
+self_modulate = Color(0.34949, 0.59232, 0.49389, 1)
+position = Vector2(150, 0)
+scale = Vector2(0.73205006, 0.73205006)
+texture = SubResource("CompressedTexture2D_lkdl0")
+script = ExtResource("10_wstln")
+
 [node name="CameraActionBounds2" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
 position = Vector2(-50, 0)
-scale = Vector2(0.45454544, 0.45454544)
+scale = Vector2(0.73205006, 0.73205006)
 texture = SubResource("CompressedTexture2D_duh7i")
 script = ExtResource("10_wstln")
 
 [node name="CameraActionShake2" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
 self_modulate = Color(0.36862746, 0.27058825, 1, 1)
 position = Vector2(50, 0)
-scale = Vector2(0.45454544, 0.45454544)
+scale = Vector2(0.73205006, 0.73205006)
 texture = SubResource("CompressedTexture2D_qanxj")
 script = ExtResource("10_wstln")
 
 [node name="CameraActionZoom2" type="Sprite2D" parent="Core/advanced_camera_area2D/AdvancedCameraTarget 0"]
 self_modulate = Color(0.36078432, 0.16862746, 0.44705883, 1)
 position = Vector2(150, 0)
-scale = Vector2(0.45454544, 0.45454544)
+scale = Vector2(0.73205006, 0.73205006)
 texture = SubResource("CompressedTexture2D_lkdl0")
 script = ExtResource("10_wstln")
 

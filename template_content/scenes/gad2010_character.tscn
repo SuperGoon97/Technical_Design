@@ -6,7 +6,6 @@
 [ext_resource type="Script" uid="uid://cmgy5tw8nlv8q" path="res://addons/gad2010interaction/core/interactor_2d.gd" id="4_6cdsv"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://Scenes/AdvancedCam/advanced_camera_area_2d.tscn" id="5_x8l6p"]
 
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_j486k"]
 shader = ExtResource("2_anvoh")
 shader_parameter/HighlightColour = Color(0, 0.433333, 1, 1)
@@ -141,6 +140,7 @@ shape = SubResource("RectangleShape2D_uhjb1")
 
 [node name="advanced_camera_area2D" parent="." instance=ExtResource("5_x8l6p")]
 is_player_area = true
+deactivate_after_overlap = false
 
 [node name="CollisionShape2D" parent="advanced_camera_area2D" index="0"]
 position = Vector2(0, -48)

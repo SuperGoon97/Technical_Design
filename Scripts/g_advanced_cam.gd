@@ -27,6 +27,8 @@ enum CAMERA_ACTION{
 	RELEASE,
 	## Zooms the camera to desired size
 	ZOOM,
+	## Clears the camera multi targets
+	CLEAR_CAMERA_MULTI,
 }
 
 enum MOVE_TO_TYPE{
@@ -37,6 +39,8 @@ enum MOVE_TO_TYPE{
 }
 var advanced_camera:AdvancedCamera2D:
 	set(value):
+		if value == null:
+			print("error setting advanced camera")
 		advanced_camera = value
 		advanced_camera.camera_zoom_change_complete.connect(_camera_zoom_complete)
 	get:
@@ -224,7 +228,6 @@ func _stay_in_area(target:AdvancedCameraTarget,action:CameraActionBounds):
 		action.CLOSEST_POINT_TYPE.SNAP:
 			force_camera_to_vector(intersection_point[0])
 		action.CLOSEST_POINT_TYPE.TWEEN:
-			print("skib")
 			advanced_camera.tween_to_target_position(intersection_point[0],action.twn_time_to_reach_target,action.twn_tween_easing)
 			if action.await_complete:
 				await advanced_camera.camera_arrived_at_pos
@@ -261,27 +264,10 @@ func _zoom(action:CameraActionZoom):
 		await advanced_camera.camera_zoom_change_complete
 	camera_function_complete.emit.call_deferred()
 
-func execute_target_function(target:AdvancedCameraTarget):
-	var move_type:CAMERA_ACTION = target.target_function
-	if target.camera_zoom_at_target != advanced_camera.zoom:
-		camera_zoom_complete = false
-		##_zoom(target)
-	match move_type:
-		CAMERA_ACTION.MOVE_TO:
-			return
-			##await _move_to(target)
-		CAMERA_ACTION.STAY_IN_AREA:
-			return
-			##_stay_in_area(target)
-		CAMERA_ACTION.MULTI_TARGET:
-			return
-			##_multi_target(target)
-		CAMERA_ACTION.SHAKE:
-			return
-			##_shake(target)
-	while camera_zoom_complete == false:
-		await get_tree().process_frame
-	camera_function_complete.emit()
-
 func _camera_zoom_complete():
 	camera_zoom_complete = true
+
+func _clear_camera_multi_targets():
+	advanced_camera.clear_camera_multi_targets()
+	await get_tree().process_frame
+	camera_function_complete.emit()

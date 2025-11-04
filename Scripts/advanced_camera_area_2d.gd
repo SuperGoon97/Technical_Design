@@ -1,7 +1,7 @@
 @tool
 class_name AdvancedCameraArea2D extends Area2D
 
-
+signal player_exited_area
 const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 
 @export_tool_button("Create Area Target","Callable") var create_target_action = create_target
@@ -10,7 +10,17 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 @export var is_one_shot:bool = false
 
 @export_category("AreaDefaults")
+@export var other_area_active_state:Dictionary[AdvancedCameraArea2D,bool]:
+	set(value):
+		if value.has(self):
+			value.erase(self)
+		other_area_active_state = value
 @export var is_player_area:bool = false
+@export var is_active_on_start:bool = true:
+	set(value):
+		is_active_on_start = value
+		set_is_active(value)
+@export var deactivate_after_overlap:bool = true
 @export var area_color:Color = Color(0.0, 0.6, 0.702, 0.42):
 	set(value):
 		area_color = value
@@ -22,7 +32,7 @@ const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 @onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 var has_activated = false
-
+var activation_time:float = 1.0
 func _ready() -> void:
 	update_area_color()
 	setup_build_lines()
@@ -55,15 +65,42 @@ func setup_build_lines():
 		target.setup()
 
 func _on_area_entered(area: Area2D) -> void:
+	if is_player_area: return
 	if has_activated == false:
 		var advanced_camera_area_2d := area as AdvancedCameraArea2D
 		if advanced_camera_area_2d and area.is_player_area:
+			print("player entered area " + name)
 			if area_targets.size() > 0:
-				execute_camera_area_targets()
+				await execute_camera_area_targets()
+				set_other_tarets_active()
 		if is_one_shot:
 			has_activated = true
+		if deactivate_after_overlap:
+			set_is_active(false)
+
+func _on_area_exited(area: Area2D) -> void:
+	if area is AdvancedCameraArea2D:
+		if area.is_player_area:
+			await player_exited_area
 
 func execute_camera_area_targets():
 	for target in area_targets:
 		target.execute_actions()
 		await target.all_actions_complete
+
+func set_is_active(state:bool):
+	if state == true:
+		if !Engine.is_editor_hint():
+			if is_node_ready():
+				await get_tree().create_timer(activation_time).timeout
+				print(name + " has been activated")
+				set_deferred("monitoring",state)
+				set_deferred("monitorable",state)
+	else:
+		set_deferred("monitoring",state)
+		set_deferred("monitorable",state)
+
+func set_other_tarets_active():
+	print("set other targets called")
+	for area in other_area_active_state:
+		area.set_is_active(other_area_active_state[area])

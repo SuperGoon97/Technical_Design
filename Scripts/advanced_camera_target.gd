@@ -150,6 +150,8 @@ func execute_actions():
 				G_Advanced_Cam._zoom(action)
 			G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
 				G_Advanced_Cam._stay_in_area(self,action)
+			G_Advanced_Cam.CAMERA_ACTION.CLEAR_CAMERA_MULTI:
+				G_Advanced_Cam._clear_camera_multi_targets()
 		await G_Advanced_Cam.camera_function_complete
 		if action.hold_camera_until_move_camera_on_emitted:
 			await G_Advanced_Cam.move_camera_on

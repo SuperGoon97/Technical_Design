@@ -1,6 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://drxgbbvowyje4"]
+[gd_scene load_steps=3 format=3 uid="uid://drxgbbvowyje4"]
 
 [ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://Scripts/advanced_camera_2d.gd" id="1_cbslc"]
+[ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://Scenes/Utility/fps_counter.tscn" id="2_4kbav"]
 
 [node name="AdvancedCamera2D" type="Camera2D" groups=["AdvancedCamera2D"]]
 script = ExtResource("1_cbslc")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+z_index = 11
+z_as_relative = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="DebugFpsCounter" parent="CanvasLayer/Control" instance=ExtResource("2_4kbav")]
+layout_mode = 1
+offset_right = 80.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+metadata/_edit_use_anchors_ = true
