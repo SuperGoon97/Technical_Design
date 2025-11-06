@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://bh23fwbjwu1hp"]
 
-[ext_resource type="Script" uid="uid://d2b3rjbrvcags" path="res://Scripts/advanced_camera_area_2d.gd" id="1_43nta"]
+[ext_resource type="Script" uid="uid://d2b3rjbrvcags" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_area_2d.gd" id="1_43nta"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mpjcl"]
-size = Vector2(86, 110)
+size = Vector2(128, 128)
 
 [node name="AdvancedCameraArea2D" type="Area2D"]
 collision_layer = 8

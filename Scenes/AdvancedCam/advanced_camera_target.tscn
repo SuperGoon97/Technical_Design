@@ -1,6 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://qqys3tfvvyt7"]
 
-[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://Scripts/advanced_camera_target.gd" id="1_yyonb"]
+[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_target.gd" id="1_yyonb"]
 
-[node name="AdvancedCameraTarget" type="Node2D"]
+[node name="AdvancedCameraTarget" type="Node2D" node_paths=PackedStringArray("target_node")]
 script = ExtResource("1_yyonb")
+target_node = NodePath(".")

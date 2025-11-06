@@ -6,11 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="4_igeiw"]
 [ext_resource type="PackedScene" uid="uid://bh23fwbjwu1hp" path="res://Scenes/AdvancedCam/advanced_camera_area_2d.tscn" id="5_pw68u"]
 [ext_resource type="PackedScene" uid="uid://qqys3tfvvyt7" path="res://Scenes/AdvancedCam/advanced_camera_target.tscn" id="6_ec553"]
-[ext_resource type="Script" uid="uid://dwopqhwp72dky" path="res://Resources/CameraActions/camera_action.gd" id="8_wr88o"]
-[ext_resource type="Script" uid="uid://byahal2e0442o" path="res://Resources/CameraActions/camera_action_clear_multi_targets.gd" id="9_ec553"]
-[ext_resource type="Script" uid="uid://bwypcw7m0swym" path="res://Scripts/ac_sprite_2d.gd" id="9_qc3pr"]
-[ext_resource type="Script" uid="uid://csyplmac21yro" path="res://Resources/CameraActions/camera_action_multi_target.gd" id="10_ypxyp"]
-[ext_resource type="Script" uid="uid://ce6xojd3ui8ux" path="res://Resources/CameraActions/camera_action_bounds.gd" id="11_ec553"]
+[ext_resource type="Script" uid="uid://dwopqhwp72dky" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action.gd" id="8_wr88o"]
+[ext_resource type="Script" uid="uid://byahal2e0442o" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_clear_multi_targets.gd" id="9_ec553"]
+[ext_resource type="Script" uid="uid://bwypcw7m0swym" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_sprite_2d.gd" id="9_qc3pr"]
+[ext_resource type="Script" uid="uid://csyplmac21yro" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_multi_target.gd" id="10_ypxyp"]
+[ext_resource type="Script" uid="uid://ce6xojd3ui8ux" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_bounds.gd" id="11_ec553"]
+
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cd8tn"]
 texture = ExtResource("3_wnarw")

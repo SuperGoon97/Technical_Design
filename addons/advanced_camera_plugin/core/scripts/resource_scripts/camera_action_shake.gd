@@ -1,7 +1,8 @@
 @tool
 class_name CameraActionShake extends CameraAction
 
-const ADVANCED_CAMERA_VIBRATE_ICON = preload("res://Resources/Sprites/advanced_camera_vibrate_icon.png")
+const ADVANCED_CAMERA_VIBRATE_ICON = preload("res://addons/advanced_camera_plugin/icons/advanced_camera_vibrate_icon.png")
+
 
 enum SHAKE_MODE{
 	## Adds strength to the current camera shake strength
@@ -19,9 +20,9 @@ enum SHAKE_MODE{
 ## Strength power is the amount strengh is pow() by
 ## [codeblock]
 ## func _foo() -> float:
-## 	var strength:float = 1.0
-## 	var strength_pow:float = 2.0
-## 	return pow(strength,strength_pow)
+##     var strength:float = 1.0
+##     var strength_pow:float = 2.0
+##     return pow(strength,strength_pow)
 @export_range(1.0,4.0,0.1,"or_greater") var strength_power:float = 2.0
 ## Decay changes the amount strength is decreased by, higher decay means the camera will come to a stop quicker. If you want the camera to shake indefintely use the "shake indefinitely" bool
 @export_range(0.1,10.0,0.1,"or_less","or_greater") var decay:float = 0.5

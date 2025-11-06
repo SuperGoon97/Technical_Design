@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c28tn4s3n7ace"
-path="res://.godot/imported/advanced_camera_multi_icon.png-348258627923399dc2dbd050d4c10e9b.ctex"
+uid="uid://c3qvk2y00mjby"
+path="res://.godot/imported/advanced_camera_bounds_icon.png-abd50f065ae8d019cd29036ce818df4b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/advanced_camera_multi_icon.png"
-dest_files=["res://.godot/imported/advanced_camera_multi_icon.png-348258627923399dc2dbd050d4c10e9b.ctex"]
+source_file="res://addons/advanced_camera_plugin/icons/advanced_camera_bounds_icon.png"
+dest_files=["res://.godot/imported/advanced_camera_bounds_icon.png-abd50f065ae8d019cd29036ce818df4b.ctex"]
 
 [params]
 

@@ -6,8 +6,6 @@ signal camera_function_complete
 signal move_camera_on
 
 enum FOLLOW_TYPE{
-	## Camera stays in the given locaiton
-	STATIC,
 	## Camera follows the target setting its location every physics frame
 	SNAP,
 	## Camera chases the target increasing in speed the further away it is
@@ -31,12 +29,6 @@ enum CAMERA_ACTION{
 	CLEAR_CAMERA_MULTI,
 }
 
-enum MOVE_TO_TYPE{
-	## Camera snaps to target
-	SNAP,
-	## Camera tweens to target
-	TWEEN,
-}
 var advanced_camera:AdvancedCamera2D:
 	set(value):
 		if value == null:
@@ -180,7 +172,7 @@ func make_global_bounds(g_pos:Vector2,bounds:PackedVector2Array) -> PackedVector
 		return_packed_array.append(global_vec)
 	return return_packed_array
 
-func get_closest_point_within_bounds(target:AdvancedCameraTarget,action:CameraActionBounds) -> PackedVector2Array:
+func get_closest_point_within_bounds(target:Node2D,action:CameraActionBounds) -> PackedVector2Array:
 	var cam_pos = get_camera_target().global_position
 	var g_bounds:PackedVector2Array = make_global_bounds(target.global_position,action.get_bounds())
 	var vec1:Vector2 = Vector2(0.0,0.0)
@@ -205,7 +197,7 @@ func _get_temp_advanced_cam():
 	return get_tree().get_first_node_in_group("AdvancedCamera2D")
 
 ## Camera target move to logic
-func _move_to(target:AdvancedCameraTarget,action:CameraActionMoveTo):
+func _move_to(target:Node2D,action:CameraActionMoveTo):
 	match action.move_by:
 		action.MOVE_BY.TWEEN:
 			tween_camera_to_target(target,action.twn_time_to_reach_target,action.twn_tween_easing)
@@ -218,7 +210,7 @@ func _move_to(target:AdvancedCameraTarget,action:CameraActionMoveTo):
 	camera_function_complete.emit()
 
 ## Camera target stay in area logic
-func _stay_in_area(target:AdvancedCameraTarget,action:CameraActionBounds):
+func _stay_in_area(target:Node2D,action:CameraActionBounds):
 	set_camera_bounds(make_global_bounds(target.global_position,action.get_bounds()))
 	set_camera_is_bound(action.bind_camera)
 	var intersection_point = get_closest_point_within_bounds(target,action)
@@ -235,7 +227,7 @@ func _stay_in_area(target:AdvancedCameraTarget,action:CameraActionBounds):
 	camera_function_complete.emit()
 
 ## Camera target multi target logic
-func _multi_target(target:AdvancedCameraTarget,action:CameraActionMultiTarget):
+func _multi_target(target:Node2D,action:CameraActionMultiTarget):
 	set_camera_multi_target_mode(action.camera_use_multi_target)
 	match action.multi_target_mode:
 		action.MULTI_TARGET_MODE.ADD:

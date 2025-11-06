@@ -16,7 +16,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]
 
-G_Advanced_Cam="*res://Scripts/g_advanced_cam.gd"
+G_Advanced_Cam="*res://addons/advanced_camera_plugin/core/scripts/global_advanced_camera.gd"
 
 [display]
 
@@ -25,7 +25,7 @@ window/size/viewport_height=720
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/gad2010interaction/plugin.cfg")
+enabled=PackedStringArray("res://addons/advanced_camera_plugin/plugin.cfg", "res://addons/gad2010interaction/plugin.cfg")
 
 [global_group]
 

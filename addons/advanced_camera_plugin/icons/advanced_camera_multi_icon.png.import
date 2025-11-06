@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://brhnotxmjfs13"
-path="res://.godot/imported/advanced_camera_vibrate_icon.png-369197e6355a1a21dee0d842e71cc051.ctex"
+uid="uid://c28tn4s3n7ace"
+path="res://.godot/imported/advanced_camera_multi_icon.png-6efb1a8b065449585cc1c3134093c0c0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Resources/Sprites/advanced_camera_vibrate_icon.png"
-dest_files=["res://.godot/imported/advanced_camera_vibrate_icon.png-369197e6355a1a21dee0d842e71cc051.ctex"]
+source_file="res://addons/advanced_camera_plugin/icons/advanced_camera_multi_icon.png"
+dest_files=["res://.godot/imported/advanced_camera_multi_icon.png-6efb1a8b065449585cc1c3134093c0c0.ctex"]
 
 [params]
 

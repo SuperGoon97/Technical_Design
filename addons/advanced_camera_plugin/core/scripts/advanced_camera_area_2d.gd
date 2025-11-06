@@ -2,7 +2,6 @@
 class_name AdvancedCameraArea2D extends Area2D
 
 signal player_exited_area
-const ADVANCED_CAMERA_TARGET = preload("uid://qqys3tfvvyt7")
 
 @export_tool_button("Create Area Target","Callable") var create_target_action = create_target
 @export_tool_button("Remove Last Area Target","Callable") var remove_last_target_action = remove_last_target
@@ -38,7 +37,7 @@ func _ready() -> void:
 	setup_build_lines()
 
 func create_target():
-	var new_target:AdvancedCameraTarget = ADVANCED_CAMERA_TARGET.instantiate()
+	var new_target:AdvancedCameraTarget = AdvancedCameraTarget.new()
 	add_child(new_target)
 	new_target.name = "AdvancedCameraTarget %s" % area_targets.size()
 	if area_targets.size() > 0:

@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="CameraActionMoveTo" load_steps=2 format=3 uid="uid://buegy56n63owg"]
-
-[ext_resource type="Script" uid="uid://3csglpgfyy7w" path="res://Resources/CameraActions/camera_action_move_to.gd" id="1_m2efj"]
-
-[resource]
-script = ExtResource("1_m2efj")
-metadata/_custom_type_script = "uid://3csglpgfyy7w"

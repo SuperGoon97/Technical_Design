@@ -1,5 +1,5 @@
 @tool
-class_name ACSprite2D extends Sprite2D
+class_name AdvancedCameraTargetSprite2D extends Sprite2D
 
 var base_scale:Vector2 = Vector2(0.5,0.5)
 var viewport:Viewport = null

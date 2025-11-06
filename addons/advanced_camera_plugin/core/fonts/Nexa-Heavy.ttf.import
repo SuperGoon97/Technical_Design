@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://ee6v7vvejn28"
-path="res://.godot/imported/Nexa-Heavy.ttf-003c494ddd6320cb070fa2ddf980e8d5.fontdata"
+path="res://.godot/imported/Nexa-Heavy.ttf-75db24c73d1f04421c069207f062fb84.fontdata"
 
 [deps]
 
-source_file="res://Resources/Fonts/Nexa-Heavy.ttf"
-dest_files=["res://.godot/imported/Nexa-Heavy.ttf-003c494ddd6320cb070fa2ddf980e8d5.fontdata"]
+source_file="res://addons/advanced_camera_plugin/core/fonts/Nexa-Heavy.ttf"
+dest_files=["res://.godot/imported/Nexa-Heavy.ttf-75db24c73d1f04421c069207f062fb84.fontdata"]
 
 [params]
 

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_gih8a"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_sun7n"]
 [ext_resource type="PackedScene" uid="uid://bovfhji2160lm" path="res://template_content/scenes/lever_trigger.tscn" id="4_06ylt"]
-[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://Scripts/advanced_camera_2d.gd" id="4_gasy2"]
+[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_2d.gd" id="4_gasy2"]
 [ext_resource type="PackedScene" uid="uid://dj6b1edsqerva" path="res://template_content/scenes/long_press_button.tscn" id="5_gasy2"]
 [ext_resource type="PackedScene" uid="uid://yqk7wh0hc2ny" path="res://template_content/scenes/blocking_wall.tscn" id="5_gih8a"]
 [ext_resource type="Script" uid="uid://bmwmmkhvqu3g1" path="res://template_content/scripts/moving_floor.gd" id="6_maps3"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://boottqhgp4jvt" path="res://template_content/scenes/checkpoint.tscn" id="10_06ylt"]
 [ext_resource type="PackedScene" uid="uid://c1lc1lnkwhkc" path="res://template_content/scenes/endless_spinner.tscn" id="10_sun7n"]
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="11_06ylt"]
+
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_gih8a")

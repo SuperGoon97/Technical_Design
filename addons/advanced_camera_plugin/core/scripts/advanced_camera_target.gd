@@ -7,9 +7,10 @@ signal all_actions_complete
 @warning_ignore("unused_signal")
 signal camera_at_target
 signal draw_camera_icon_changed(state:bool)
-const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 
-@export_storage var camera_action_ui:Dictionary[CameraAction,ACSprite2D]
+const NEXA_CUSTOM_FONT = preload("res://addons/advanced_camera_plugin/core/fonts/nexa_custom_font.tres")
+
+@export_storage var camera_action_ui:Dictionary[CameraAction,AdvancedCameraTargetSprite2D]
 
 @export var camera_actions:Array[CameraAction]:
 	set(value):
@@ -18,7 +19,11 @@ const NEXA_CUSTOM_FONT = preload("res://Resources/Fonts/nexa_custom_font.tres")
 			call_deferred("setup_camera_actions")
 		camera_actions = value
 
+## Change this to the parent node of this ACTarget for things like multi target
+@export var target_node:Node2D = self
+## Toggle if the viewport rect is drawn, only works if a move to action is present
 @export var _draw_viewport_rect:bool = true
+## Toggle if the bounds rect is drawn, only works if a bounds rect is present
 @export var _draw_bounds:bool = true
 @export var _draw_camera_icon:bool = true:
 	get:
@@ -109,7 +114,7 @@ func setup_camera_actions():
 			if !bounds_action.request_bounds_changed.is_connected(update_packed_bound_array):
 				bounds_action.request_bounds_changed.connect(update_packed_bound_array)
 
-		var new_acsprite2d:ACSprite2D = ACSprite2D.new()
+		var new_acsprite2d:AdvancedCameraTargetSprite2D = AdvancedCameraTargetSprite2D.new()
 		add_child(new_acsprite2d)
 		new_acsprite2d.name = action.get_script().get_global_name()
 		new_acsprite2d.position = Vector2(spacing * (1.0 - n / 2.0 + i),0.0)
@@ -125,11 +130,11 @@ func setup_camera_actions():
 	var t_children = get_children()
 	var ui_values = camera_action_ui.values()
 	for t in t_children:
-		if t is ACSprite2D:
+		if t is AdvancedCameraTargetSprite2D:
 			if !ui_values.has(t):
 				clear_camera_actiun_ui(t)
 
-func clear_camera_actiun_ui(acsprite:ACSprite2D):
+func clear_camera_actiun_ui(acsprite:AdvancedCameraTargetSprite2D):
 	await get_tree().create_timer(1.0).timeout
 	acsprite.queue_free()
 
@@ -139,17 +144,17 @@ func execute_actions():
 			await get_tree().create_timer(action.pre_wait).timeout
 		match action.action_function:
 			G_Advanced_Cam.CAMERA_ACTION.MOVE_TO:
-				G_Advanced_Cam._move_to(self,action)
+				G_Advanced_Cam._move_to(target_node,action)
 			G_Advanced_Cam.CAMERA_ACTION.SHAKE:
 				G_Advanced_Cam._shake(action)
 			G_Advanced_Cam.CAMERA_ACTION.RELEASE:
 				G_Advanced_Cam.set_camera_to_default()
 			G_Advanced_Cam.CAMERA_ACTION.MULTI_TARGET:
-				G_Advanced_Cam._multi_target(self,action)
+				G_Advanced_Cam._multi_target(target_node,action)
 			G_Advanced_Cam.CAMERA_ACTION.ZOOM:
 				G_Advanced_Cam._zoom(action)
 			G_Advanced_Cam.CAMERA_ACTION.STAY_IN_AREA:
-				G_Advanced_Cam._stay_in_area(self,action)
+				G_Advanced_Cam._stay_in_area(target_node,action)
 			G_Advanced_Cam.CAMERA_ACTION.CLEAR_CAMERA_MULTI:
 				G_Advanced_Cam._clear_camera_multi_targets()
 		await G_Advanced_Cam.camera_function_complete

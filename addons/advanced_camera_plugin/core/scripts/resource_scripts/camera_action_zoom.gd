@@ -3,7 +3,7 @@ class_name CameraActionZoom extends CameraAction
 
 signal request_zoom_changed()
 
-const ADVANCED_CAMERA_ZOOM_ICON = preload("res://Resources/Sprites/advanced_camera_zoom_icon.png")
+const ADVANCED_CAMERA_ZOOM_ICON = preload("res://addons/advanced_camera_plugin/icons/advanced_camera_zoom_icon.png")
 
 enum ZOOM_TYPE{
 	TWEEN,

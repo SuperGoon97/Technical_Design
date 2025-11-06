@@ -1,7 +1,7 @@
 @tool 
 class_name CameraActionMultiTarget extends CameraAction
 
-const ADVANCED_CAMERA_MULTI_ICON = preload("res://Resources/Sprites/advanced_camera_multi_icon.png")
+const ADVANCED_CAMERA_MULTI_ICON = preload("res://addons/advanced_camera_plugin/icons/advanced_camera_multi_icon.png")
 
 enum MULTI_TARGET_MODE{
 	## Adds this target to current camera multi targets

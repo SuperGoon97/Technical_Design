@@ -1,7 +1,7 @@
 @tool
 class_name CameraActionMoveTo extends CameraAction
 
-const ADVANCED_CAMERA_ICON = preload("res://Resources/Sprites/advanced_camera_icon.png")
+const ADVANCED_CAMERA_ICON = preload("res://addons/advanced_camera_plugin/icons/advanced_camera_icon.png")
 
 enum MOVE_BY{
 	TWEEN,

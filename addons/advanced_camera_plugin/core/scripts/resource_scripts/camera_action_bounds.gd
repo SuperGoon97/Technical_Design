@@ -3,7 +3,8 @@ class_name CameraActionBounds extends CameraAction
 
 signal request_bounds_changed()
 
-const ADVANCED_CAMERA_BOUNDS_ICON = preload("res://Resources/Sprites/advanced_camera_bounds_icon.png")
+const ADVANCED_CAMERA_BOUNDS_ICON = preload("res://addons/advanced_camera_plugin/icons/advanced_camera_bounds_icon.png")
+
 
 enum CLOSEST_POINT_TYPE{
 	NONE,

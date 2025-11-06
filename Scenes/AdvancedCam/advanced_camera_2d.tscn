@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://drxgbbvowyje4"]
 
-[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://Scripts/advanced_camera_2d.gd" id="1_cbslc"]
+[ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_2d.gd" id="1_cbslc"]
 [ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://Scenes/Utility/fps_counter.tscn" id="2_4kbav"]
 
 [node name="AdvancedCamera2D" type="Camera2D" groups=["AdvancedCamera2D"]]
