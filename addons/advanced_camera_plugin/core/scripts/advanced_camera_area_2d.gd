@@ -20,21 +20,17 @@ signal player_exited_area
 		is_active_on_start = value
 		set_is_active(value)
 @export var deactivate_after_overlap:bool = true
-@export var area_color:Color = Color(0.0, 0.6, 0.702, 0.42):
-	set(value):
-		area_color = value
-		update_area_color()
-	get:
-		return area_color
 
 @export var area_targets:Array[AdvancedCameraTarget]
-@onready var collision_shape_2d: CollisionShape2D = $CollisionShape2D
 
 var has_activated = false
 var activation_time:float = 1.0
 func _ready() -> void:
-	update_area_color()
 	setup_build_lines()
+	if !area_entered.is_connected(_on_area_entered):
+		area_entered.connect(_on_area_entered)
+	if !area_exited.is_connected(_on_area_exited):
+		area_exited.connect(_on_area_exited)
 
 func create_target():
 	var new_target:AdvancedCameraTarget = AdvancedCameraTarget.new()
@@ -46,7 +42,6 @@ func create_target():
 		new_target.target_parent = self
 		
 	new_target.set_owner(get_tree().edited_scene_root)
-	new_target.set("self_modulate",Color(area_color.r,area_color.g,area_color.b))
 	area_targets.push_back(new_target)
 	setup_build_lines()
 
@@ -55,15 +50,13 @@ func remove_last_target():
 	if last_area_target:
 		last_area_target.queue_free()
 
-func update_area_color():
-	if collision_shape_2d:
-		collision_shape_2d.debug_color = area_color
-
 func setup_build_lines():
 	for target in area_targets:
 		target.setup()
 
 func _on_area_entered(area: Area2D) -> void:
+	print(area.name)
+	print(area.get_parent().name)
 	if is_player_area: return
 	if has_activated == false:
 		var advanced_camera_area_2d := area as AdvancedCameraArea2D

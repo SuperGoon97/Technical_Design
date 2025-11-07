@@ -31,7 +31,11 @@ const NEXA_CUSTOM_FONT = preload("res://addons/advanced_camera_plugin/core/fonts
 	set(value):
 		draw_camera_icon_changed.emit(value)
 		_draw_camera_icon = value
-@export var _draw_color:Color = Color.WHITE
+@export var _draw_color:Color = Color.WHITE:
+	set(value):
+		_draw_color = value
+		if line2d:
+			line2d.self_modulate = _draw_color
 
 var camera_line:ToolLine2D
 var one_over_camera_zoom:Vector2
@@ -45,6 +49,7 @@ var zoom:Vector2 = Vector2(1.0,1.0)
 var has_bounds_action:bool = false
 var bounds_action:CameraActionBounds = null
 var packed_array:PackedVector2Array
+var line2d:ToolLine2D
 
 func _draw() -> void:
 	if Engine.is_editor_hint():
@@ -67,10 +72,10 @@ func draw_viewport_rect():
 	var dy = Vector2(half_viewport_x*one_over_camera_zoom.x,-half_viewport_y*one_over_camera_zoom.y)
 	var dyy = Vector2(-half_viewport_x*one_over_camera_zoom.x,-half_viewport_y*one_over_camera_zoom.y)
 
-	draw_line(dx,dy,self_modulate)
-	draw_line(dxx,dyy,self_modulate)
-	draw_line(dxx,dx,self_modulate)
-	draw_line(dyy,dy,self_modulate)
+	draw_line(dx,dy,_draw_color)
+	draw_line(dxx,dyy,_draw_color)
+	draw_line(dxx,dx,_draw_color)
+	draw_line(dyy,dy,_draw_color)
 	
 	draw_string(NEXA_CUSTOM_FONT,Vector2(-75.0,(-(half_viewport_y*1.01)*one_over_camera_zoom.y)),"VIEWPORT SIZE")
 
@@ -78,7 +83,6 @@ func draw_viewport_rect():
 func draw_camera_bounds_rect():
 	if packed_array.is_empty():
 		update_packed_bound_array()
-	
 	draw_line(packed_array[0],packed_array[1],_draw_color)
 	draw_line(packed_array[2],packed_array[3],_draw_color)
 	draw_line(packed_array[2],packed_array[0],_draw_color)
@@ -88,6 +92,7 @@ func draw_camera_bounds_rect():
 func setup():
 	camera_line = ToolLine2D.new()
 	add_child(camera_line)
+	line2d = camera_line
 	camera_line.width = 2.0
 	camera_line.global_position = Vector2(0,0)
 	camera_line.add_point(global_position,0)

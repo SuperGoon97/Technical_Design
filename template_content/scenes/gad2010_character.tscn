@@ -141,6 +141,7 @@ shape = SubResource("RectangleShape2D_uhjb1")
 [node name="advanced_camera_area2D" parent="." instance=ExtResource("5_x8l6p")]
 is_player_area = true
 deactivate_after_overlap = false
+area_color = Color(0, 0.6, 0.702, 0.42)
 
 [node name="CollisionShape2D" parent="advanced_camera_area2D" index="0"]
 position = Vector2(0, -48)
