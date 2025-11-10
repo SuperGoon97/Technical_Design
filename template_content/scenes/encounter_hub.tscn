@@ -1,17 +1,10 @@
-[gd_scene load_steps=22 format=4 uid="uid://dvjgqdaecrw8v"]
+[gd_scene load_steps=8 format=4 uid="uid://dvjgqdaecrw8v"]
 
 [ext_resource type="PackedScene" uid="uid://dej5e01xpode" path="res://template_content/scenes/gad2010_character.tscn" id="1_2000f"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_cfhth"]
 [ext_resource type="Texture2D" uid="uid://bodpabxbh11ec" path="res://template_content/sprites/bg_texture.png" id="3_2mkwc"]
 [ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_2d.gd" id="4_lorlc"]
 [ext_resource type="PackedScene" uid="uid://ugge72waq8s" path="res://template_content/scenes/level_entry.tscn" id="4_mtv41"]
-[ext_resource type="Script" uid="uid://d2b3rjbrvcags" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_area_2d.gd" id="5_5led3"]
-[ext_resource type="Script" uid="uid://cy8r1xy3uteaq" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_target.gd" id="6_v08ew"]
-[ext_resource type="Script" uid="uid://dwopqhwp72dky" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action.gd" id="7_k81ja"]
-[ext_resource type="Script" uid="uid://bwypcw7m0swym" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_sprite_2d.gd" id="8_5led3"]
-[ext_resource type="Script" uid="uid://3csglpgfyy7w" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_move_to.gd" id="9_v08ew"]
-[ext_resource type="Script" uid="uid://corh44em1yyj6" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_zoom.gd" id="11_v08ew"]
-[ext_resource type="Script" uid="uid://ce6xojd3ui8ux" path="res://addons/advanced_camera_plugin/core/scripts/resource_scripts/camera_action_bounds.gd" id="12_cpp2d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6ou7w"]
 texture = ExtResource("2_cfhth")
@@ -446,45 +439,6 @@ terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_6ou7w")
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6x818"]
-size = Vector2(100, 100)
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_wstln"]
-load_path = "res://.godot/imported/advanced_camera_zoom_icon.png-046333f102fd42390222142c639f988c.ctex"
-
-[sub_resource type="Resource" id="Resource_lkdl0"]
-script = ExtResource("11_v08ew")
-await_complete = false
-camera_zoom_at_target = Vector2(1.25, 1.25)
-lock_player = true
-icon = SubResource("CompressedTexture2D_wstln")
-metadata/_custom_type_script = "uid://corh44em1yyj6"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_duh7i"]
-load_path = "res://.godot/imported/advanced_camera_icon.png-d7e0c3fb1ef5f639f4a2caba7b543dce.ctex"
-
-[sub_resource type="Resource" id="Resource_qanxj"]
-script = ExtResource("9_v08ew")
-lock_player = true
-hold_camera_until_move_camera_on_emitted = true
-icon = SubResource("CompressedTexture2D_duh7i")
-metadata/_custom_type_script = "uid://3csglpgfyy7w"
-
-[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ly22g"]
-load_path = "res://.godot/imported/advanced_camera_bounds_icon.png-abd50f065ae8d019cd29036ce818df4b.ctex"
-
-[sub_resource type="Resource" id="Resource_7v3yb"]
-script = ExtResource("12_cpp2d")
-bind_camera = true
-north_bound = 100.0
-south_bound = 100.0
-east_bound = 100.0
-west_bound = 100.0
-move_camera_to_closest_point = 2
-icon = SubResource("CompressedTexture2D_ly22g")
-draw_color = Color(0.32156864, 0.11764706, 0.43137255, 1)
-metadata/_custom_type_script = "uid://ce6xojd3ui8ux"
-
 [node name="Encounter Hub" type="Node2D"]
 
 [node name="Core" type="Node" parent="."]
@@ -542,32 +496,3 @@ level_path = "res://template_content/scenes/gym.tscn"
 [node name="LevelEntry(Encounter)" parent="." instance=ExtResource("4_mtv41")]
 position = Vector2(929, 128)
 level_path = "res://template_content/scenes/boss_encounter.tscn"
-
-[node name="AdvancedCameraArea2D" type="Area2D" parent="." node_paths=PackedStringArray("area_targets")]
-collision_layer = 8
-collision_mask = 8
-script = ExtResource("5_5led3")
-area_targets = [NodePath("AdvancedCameraTarget 0")]
-metadata/_custom_type_script = "uid://d2b3rjbrvcags"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AdvancedCameraArea2D"]
-shape = SubResource("RectangleShape2D_6x818")
-
-[node name="AdvancedCameraTarget 0" type="Node2D" parent="AdvancedCameraArea2D" node_paths=PackedStringArray("target_node", "target_parent")]
-position = Vector2(-304, -224)
-script = ExtResource("6_v08ew")
-camera_action_ui = Dictionary[ExtResource("7_k81ja"), ExtResource("8_5led3")]({
-SubResource("Resource_lkdl0"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(-50, 0),"rotation":0.0,"scale":Vector2(0.605, 0.605),"skew":0.0,"texture":SubResource("CompressedTexture2D_wstln"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("8_5led3"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1415, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":0,"script":null)
-)
-,
-SubResource("Resource_qanxj"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(50, 0),"rotation":0.0,"scale":Vector2(0.605, 0.605),"skew":0.0,"texture":SubResource("CompressedTexture2D_duh7i"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("8_5led3"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1415, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":0,"script":null)
-)
-,
-SubResource("Resource_7v3yb"): Object(Sprite2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(0.32156864, 0.11764706, 0.43137255, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(150, 0),"rotation":0.0,"scale":Vector2(0.605, 0.605),"skew":0.0,"texture":SubResource("CompressedTexture2D_ly22g"),"centered":true,"offset":Vector2(0, 0),"flip_h":false,"flip_v":false,"hframes":1,"vframes":1,"frame":0,"region_enabled":false,"region_rect":Rect2(0, 0, 0, 0),"region_filter_clip_enabled":false,"script":ExtResource("8_5led3"),"base_scale":Vector2(0.5, 0.5),"viewport":Object(SubViewport,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":1,"auto_translate_mode":1,"editor_description":"","disable_3d":true,"use_xr":false,"own_world_3d":false,"world_3d":null,"transparent_bg":false,"handle_input_locally":false,"snap_2d_transforms_to_pixel":true,"snap_2d_vertices_to_pixel":true,"msaa_2d":0,"msaa_3d":0,"screen_space_aa":0,"use_taa":false,"use_debanding":false,"use_occlusion_culling":false,"mesh_lod_threshold":1.0,"debug_draw":0,"use_hdr_2d":false,"scaling_3d_mode":0,"scaling_3d_scale":1.0,"texture_mipmap_bias":0.0,"anisotropic_filtering_level":2,"fsr_sharpness":0.2,"vrs_mode":0,"vrs_update_mode":1,"vrs_texture":null,"canvas_item_default_texture_filter":1,"canvas_item_default_texture_repeat":0,"audio_listener_enable_2d":true,"audio_listener_enable_3d":false,"physics_object_picking":false,"physics_object_picking_sort":false,"physics_object_picking_first_only":false,"gui_disable_input":true,"gui_snap_controls_to_pixels":true,"gui_embed_subwindows":true,"sdf_oversize":1,"sdf_scale":1,"positional_shadow_atlas_size":2048,"positional_shadow_atlas_16_bits":true,"positional_shadow_atlas_quad_0":2,"positional_shadow_atlas_quad_1":2,"positional_shadow_atlas_quad_2":3,"positional_shadow_atlas_quad_3":4,"canvas_cull_mask":4294967295,"oversampling":true,"oversampling_override":0.0,"size":Vector2i(1415, 991),"size_2d_override":Vector2i(0, 0),"size_2d_override_stretch":false,"render_target_clear_mode":0,"render_target_update_mode":0,"script":null)
-)
-
-})
-camera_actions = Array[ExtResource("7_k81ja")]([SubResource("Resource_lkdl0"), SubResource("Resource_qanxj"), SubResource("Resource_7v3yb")])
-target_node = NodePath(".")
-_draw_color = Color(0.32156864, 0.29803923, 1, 1)
-target_parent = NodePath("..")

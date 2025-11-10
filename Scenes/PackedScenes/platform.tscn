@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://rfpesqjexj0k"]
+
+[ext_resource type="Texture2D" uid="uid://bdfrfhflyc2al" path="res://Resources/Sprites/platform.tres" id="1_jcqs1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dw5a8"]
+size = Vector2(84, 84)
+
+[node name="Platform" type="Node2D"]
+
+[node name="NinePatchRect" type="NinePatchRect" parent="."]
+offset_left = -42.0
+offset_top = -42.0
+offset_right = 42.0
+offset_bottom = 42.0
+texture = ExtResource("1_jcqs1")
+region_rect = Rect2(0, 0, 64, 64)
+patch_margin_left = 21
+patch_margin_top = 21
+patch_margin_right = 21
+patch_margin_bottom = 21
+
+[node name="StaticBody2D" type="StaticBody2D" parent="NinePatchRect"]
+metadata/_edit_lock_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NinePatchRect/StaticBody2D"]
+position = Vector2(42, 42)
+shape = SubResource("RectangleShape2D_dw5a8")
+metadata/_edit_lock_ = true
