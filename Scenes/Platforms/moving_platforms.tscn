@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0suc4oxeyaje"]
+
+[ext_resource type="Script" uid="uid://dkod06n0vrhxs" path="res://Scripts/moving_platforms.gd" id="1_47csf"]
+[ext_resource type="Texture2D" uid="uid://b2j0vv03sx7rf" path="res://Resources/Sprites/marker.tres" id="1_sppjv"]
+
+[node name="MovingPlatforms" type="Node2D"]
+script = ExtResource("1_47csf")
+number_of_platforms = null
+
+[node name="PointMarker1" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0, 0, 1)
+position = Vector2(0, -25)
+texture = ExtResource("1_sppjv")
+
+[node name="PointMarker2" type="Sprite2D" parent="."]
+self_modulate = Color(0, 0, 1, 1)
+position = Vector2(0, 25)
+texture = ExtResource("1_sppjv")

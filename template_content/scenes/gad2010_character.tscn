@@ -139,11 +139,11 @@ instigator = NodePath("..")
 metadata/_custom_type_script = "uid://cmgy5tw8nlv8q"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Interactor2D"]
-visible = false
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_uhjb1")
 
 [node name="AdvancedCameraArea2D" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 8
 script = ExtResource("5_x8l6p")
@@ -154,3 +154,6 @@ metadata/_custom_type_script = "uid://d2b3rjbrvcags"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AdvancedCameraArea2D"]
 position = Vector2(-4, -52)
 shape = SubResource("RectangleShape2D_olskl")
+
+[node name="GrabPosition" type="Node2D" parent="."]
+position = Vector2(0, -128)

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="GAD2010-Godot"
-run/main_scene="uid://dvjgqdaecrw8v"
+run/main_scene="uid://cxuccps8ntr7t"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 
 [autoload]

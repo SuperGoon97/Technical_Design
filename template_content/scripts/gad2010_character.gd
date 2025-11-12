@@ -2,7 +2,6 @@ class_name GAD2010Character extends CharacterBody2D
 
 const SPEED:float = 300.0
 const JUMP_VELOCITY:float = -850.0
-const GRAVITY_MULTIPLIER:float = 3
 const HUB_SCENE_PATH:String = "res://template_content/scenes/encounter_hub.tscn"
 
 ## How long does the interact key need to be down to be considered a hold, rather than a press?
@@ -13,11 +12,17 @@ const HUB_SCENE_PATH:String = "res://template_content/scenes/encounter_hub.tscn"
 @onready var _sprite := $AnimatedSprite2D
 @onready var _interactor := $Interactor2D
 @onready var _progress_bar := $ProgressBar
+@onready var grab_position: Node2D = $GrabPosition
+
+var gravity_multiplier:float = 3.0
+var fall_multiplier:float = 1.0
+
 var _held_time:float = -1
 var _held_state:HoldState = HoldState.NONE
 var _checkpoint:Node2D = null
 
 var player_can_move:bool = true
+var is_holding_grabable = false
 
 func _ready() -> void:
 	_interactor.interaction_entered.connect(_on_interaction_entered)
@@ -36,7 +41,10 @@ func _physics_process(delta: float) -> void:
 	_update_held_state(delta)
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta * GRAVITY_MULTIPLIER
+		if velocity.y >= 0.0:
+			velocity += get_gravity() * delta * gravity_multiplier * fall_multiplier
+		else:
+			velocity += get_gravity() * delta * gravity_multiplier
 	
 	if is_on_floor():
 		match _held_state:
