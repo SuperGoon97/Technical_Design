@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://crxdyislbob3g"]
+
+[ext_resource type="Script" uid="uid://lffy3osmfela" path="res://Scripts/grabable_spawner.gd" id="1_r6jsp"]
+[ext_resource type="Texture2D" uid="uid://cehrc35telvf2" path="res://Resources/Sprites/grabable_spawner.tres" id="2_51cai"]
+
+[node name="GrabableSpawner" type="Node2D"]
+script = ExtResource("1_r6jsp")
+disabled_modulate = Color(0.5137255, 0.5137255, 0.5137255, 0.7176471)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_51cai")

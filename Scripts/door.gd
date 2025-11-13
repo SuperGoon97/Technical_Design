@@ -1,0 +1,30 @@
+extends Activatable
+
+@export var y_distance_to_move:float = 125.0
+@onready var default_position:Vector2 = global_position
+
+var door_tween:Tween
+
+var door_open:bool = false:
+	set(value):
+		if value == true:
+			open_door()
+		else:
+			close_door()
+		door_open = value
+
+func execute():
+	door_open = !door_open
+
+func open_door():
+	do_tween(-y_distance_to_move)
+
+func do_tween(input:float):
+	if door_tween:
+		if door_tween.is_running():
+			door_tween.kill()
+	door_tween = create_tween()
+	door_tween.tween_property(self,"global_position",Vector2(default_position.x,default_position.y + input),0.5)
+
+func close_door():
+	do_tween(0.0)

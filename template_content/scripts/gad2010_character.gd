@@ -23,6 +23,14 @@ var _checkpoint:Node2D = null
 
 var player_can_move:bool = true
 var is_holding_grabable = false
+var held_grabable:Grabable = null:
+	set(value):
+		bind_held_grabable(value)
+		held_grabable = value
+
+var was_on_floor:bool = false
+var has_jumped:bool = false
+@onready var coyote_timer: Timer = $CoyoteTimer
 
 func _ready() -> void:
 	_interactor.interaction_entered.connect(_on_interaction_entered)
@@ -33,14 +41,19 @@ func set_player_can_move(state:bool):
 	player_can_move = !state
 
 func _physics_process(delta: float) -> void:
+	
+	was_on_floor = is_on_floor()
+	if was_on_floor:
+		has_jumped = false
 	if Input.is_action_just_pressed("ui_accept"):
 		G_Advanced_Cam.move_camera_on.emit()
 	if !player_can_move:
 		return
 
+	
 	_update_held_state(delta)
 	# Add the gravity.
-	if not is_on_floor():
+	if !is_on_floor() and !coyote_timer.time_left > 0:
 		if velocity.y >= 0.0:
 			velocity += get_gravity() * delta * gravity_multiplier * fall_multiplier
 		else:
@@ -63,11 +76,14 @@ func _physics_process(delta: float) -> void:
 					interrupt_interaction()
 			_:
 				_progress_bar.visible = false
-		# Handle jump.
 		if Input.is_action_just_pressed("ui_accept"):
-			velocity.y = JUMP_VELOCITY
 			G_Advanced_Cam.move_camera_on.emit()
 			interrupt_interaction()
+	if Input.is_action_just_pressed("ui_accept"):
+		if is_on_floor() or coyote_timer.time_left > 0:
+			velocity.y = JUMP_VELOCITY
+			has_jumped = true
+
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -89,6 +105,21 @@ func _physics_process(delta: float) -> void:
 		_sprite.play("jump")
 		
 	move_and_slide()
+	
+	if not is_on_floor() and was_on_floor:
+		if velocity.y >= 0:
+			coyote_timer.start()
+
+func bind_held_grabable(grabable:Grabable):
+	if grabable == null: return
+	grabable.request_drop.connect(drop_grabable)
+
+func drop_grabable():
+	held_grabable._drop(self)
+	clear_held_grabable()
+
+func clear_held_grabable():
+	held_grabable = null
 
 func _update_held_state(delta:float) -> void:
 	if Input.is_action_just_pressed("interact"):

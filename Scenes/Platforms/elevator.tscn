@@ -1,0 +1,53 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5p4e71yn1mc"]
+
+[ext_resource type="Script" uid="uid://8u74kuwy1i4a" path="res://template_content/scripts/elevator.gd" id="1_erkk8"]
+[ext_resource type="Texture2D" uid="uid://bvpqejldy8ib" path="res://Resources/Sprites/elevator_platform_l.tres" id="1_vf1ob"]
+[ext_resource type="Texture2D" uid="uid://dol82oiuh6rad" path="res://Resources/Sprites/elevator_platform_r.tres" id="2_el3kt"]
+[ext_resource type="Script" uid="uid://dexoxr3uco4vw" path="res://addons/gad2010interaction/core/interaction_area_2d.gd" id="4_erkk8"]
+[ext_resource type="Script" uid="uid://d182ka7jx8rbo" path="res://addons/gad2010interaction/core/interaction.gd" id="5_qyvnh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o4c6x"]
+size = Vector2(128, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bolh2"]
+size = Vector2(128, 122)
+
+[node name="Elevator" type="Node2D"]
+script = ExtResource("1_erkk8")
+sprite_collection = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":null)
+
+ghost_node = Object(Node2D,"_import_path":NodePath(""),"unique_name_in_owner":false,"process_mode":0,"process_priority":0,"process_physics_priority":0,"process_thread_group":0,"physics_interpolation_mode":0,"auto_translate_mode":0,"editor_description":"","visible":true,"modulate":Color(1, 1, 1, 1),"self_modulate":Color(1, 1, 1, 1),"show_behind_parent":false,"top_level":false,"clip_children":0,"light_mask":1,"visibility_layer":1,"z_index":0,"z_as_relative":true,"y_sort_enabled":false,"texture_filter":0,"texture_repeat":0,"material":null,"use_parent_material":false,"position":Vector2(0, 0),"rotation":0.0,"scale":Vector2(1, 1),"skew":0.0,"script":null)
+
+speed = 3.0
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+position = Vector2(0, 31)
+shape = SubResource("RectangleShape2D_o4c6x")
+one_way_collision = true
+one_way_collision_margin = 8.0
+
+[node name="InteractionArea2D" type="Area2D" parent="."]
+script = ExtResource("4_erkk8")
+metadata/_custom_type_script = "uid://dexoxr3uco4vw"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea2D"]
+position = Vector2(0, -67)
+shape = SubResource("RectangleShape2D_bolh2")
+
+[node name="Interaction" type="Node" parent="InteractionArea2D"]
+script = ExtResource("5_qyvnh")
+interaction_type = 1
+metadata/_custom_type_script = "uid://d182ka7jx8rbo"
+
+[node name="SpriteCollection" type="Node2D" parent="."]
+
+[node name="ElevatorPlatformL" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(-32, 32)
+texture = ExtResource("1_vf1ob")
+
+[node name="ElevatorPlatformR" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(32, 32)
+texture = ExtResource("2_el3kt")

@@ -2,6 +2,7 @@
 class_name Grabable extends InteractionArea2D
 
 signal queued_destruction
+signal request_drop
 
 var held = false
 @onready var scene_parent:Node = get_parent()
@@ -12,6 +13,7 @@ func _init() -> void:
 
 func _ready() -> void:
 	interaction_node.short_interaction.connect(_on_interaction_short_interaction)
+	request_drop.connect(_destroy)
 	
 func _on_interaction_short_interaction(instigator: Node) -> void:
 	if instigator is GAD2010Character:
@@ -24,6 +26,7 @@ func _grabbed(instigator: GAD2010Character):
 	global_position = instigator.grab_position.global_position
 	reparent(instigator.grab_position)
 	instigator.is_holding_grabable = true
+	instigator.held_grabable = self
 	held = true
 	_activate_effect(instigator)
 
