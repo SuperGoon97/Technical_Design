@@ -1,6 +1,6 @@
 [gd_scene load_steps=8 format=3 uid="uid://b5p4e71yn1mc"]
 
-[ext_resource type="Script" uid="uid://8u74kuwy1i4a" path="res://template_content/scripts/elevator.gd" id="1_erkk8"]
+[ext_resource type="Script" uid="uid://8u74kuwy1i4a" path="res://Scripts/elevator.gd" id="1_erkk8"]
 [ext_resource type="Texture2D" uid="uid://bvpqejldy8ib" path="res://Resources/Sprites/elevator_platform_l.tres" id="1_vf1ob"]
 [ext_resource type="Texture2D" uid="uid://dol82oiuh6rad" path="res://Resources/Sprites/elevator_platform_r.tres" id="2_el3kt"]
 [ext_resource type="Script" uid="uid://dexoxr3uco4vw" path="res://addons/gad2010interaction/core/interaction_area_2d.gd" id="4_erkk8"]

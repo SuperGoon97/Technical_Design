@@ -1,0 +1,11 @@
+[gd_scene load_steps=4 format=3 uid="uid://cc3anr66dpvvy"]
+
+[ext_resource type="PackedScene" uid="uid://b45r58hoh28gb" path="res://Scenes/Grabables/grabable_base.tscn" id="1_aswcr"]
+[ext_resource type="Script" uid="uid://ljqpne5uq3ap" path="res://Scripts/grabable_jumpy.gd" id="2_hf0tk"]
+[ext_resource type="Texture2D" uid="uid://c1njscymdg7vd" path="res://Resources/Sprites/grabable_2.tres" id="3_hf0tk"]
+
+[node name="GrabableJumpy" instance=ExtResource("1_aswcr")]
+script = ExtResource("2_hf0tk")
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("3_hf0tk")

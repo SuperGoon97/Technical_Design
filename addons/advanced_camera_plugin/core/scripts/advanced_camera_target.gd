@@ -88,7 +88,8 @@ func setup():
 	camera_line.width = 2.0
 	camera_line.global_position = Vector2(0,0)
 	camera_line.add_point(global_position,0)
-	camera_line.add_point(target_parent.global_position,1)
+	if target_parent:
+		camera_line.add_point(target_parent.global_position,1)
 
 func setup_camera_actions():
 	has_zoom_action = false

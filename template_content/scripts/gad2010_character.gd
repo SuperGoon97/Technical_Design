@@ -16,6 +16,7 @@ const HUB_SCENE_PATH:String = "res://template_content/scenes/encounter_hub.tscn"
 
 var gravity_multiplier:float = 3.0
 var fall_multiplier:float = 1.0
+var jump_multiplier:float = 1.0
 
 var _held_time:float = -1
 var _held_state:HoldState = HoldState.NONE
@@ -41,7 +42,7 @@ func set_player_can_move(state:bool):
 	player_can_move = !state
 
 func _physics_process(delta: float) -> void:
-	
+	velocity.y = clamp(velocity.y,-1500.0,1500.0)
 	was_on_floor = is_on_floor()
 	if was_on_floor:
 		has_jumped = false
@@ -65,6 +66,8 @@ func _physics_process(delta: float) -> void:
 				_interactor.attempt_short_interaction()
 				_resolve_highlight()
 			HoldState.HOLDING:
+				if held_grabable:
+					held_grabable._drop(self)
 				var i = _interactor.attempt_long_interaction(delta)
 				if i.success:
 					_progress_bar.indeterminate = i.node.interaction_node.is_endless()
@@ -81,7 +84,7 @@ func _physics_process(delta: float) -> void:
 			interrupt_interaction()
 	if Input.is_action_just_pressed("ui_accept"):
 		if is_on_floor() or coyote_timer.time_left > 0:
-			velocity.y = JUMP_VELOCITY
+			velocity.y = JUMP_VELOCITY * jump_multiplier
 			has_jumped = true
 
 

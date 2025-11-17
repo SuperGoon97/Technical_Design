@@ -8,11 +8,12 @@ var held = false
 @onready var scene_parent:Node = get_parent()
 
 func _init() -> void:
-	interaction_node.interaction_type = interaction_node.Type.SHORT
+	interaction_node.interaction_type = interaction_node.Type.ANY
 	interaction_node.enabled = true
 
 func _ready() -> void:
 	interaction_node.short_interaction.connect(_on_interaction_short_interaction)
+	interaction_node.long_interaction.connect(_on_interaction_long_interaction)
 	request_drop.connect(_destroy)
 	
 func _on_interaction_short_interaction(instigator: Node) -> void:
@@ -21,6 +22,11 @@ func _on_interaction_short_interaction(instigator: Node) -> void:
 			_drop(instigator)
 		elif instigator.is_holding_grabable == false:
 			_grabbed(instigator)
+
+func _on_interaction_long_interaction(instigator: Node, _phase: Interaction.Phase, _delta: float) -> void:
+	if instigator is GAD2010Character:
+		if held:
+			_drop(instigator)
 
 func _grabbed(instigator: GAD2010Character):
 	global_position = instigator.grab_position.global_position

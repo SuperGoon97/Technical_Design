@@ -23,6 +23,8 @@ var active:bool = true:
 func _ready() -> void:
 	if create_on_ready:
 		create_grabable()
+	else:
+		active = false
 
 func execute():
 	active = !active

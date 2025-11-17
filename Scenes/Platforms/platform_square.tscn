@@ -1,0 +1,35 @@
+[gd_scene load_steps=6 format=3 uid="uid://c7w3026f6pkpf"]
+
+[ext_resource type="Texture2D" uid="uid://d2p0ctjmn6clx" path="res://Resources/Sprites/wall__bottom_r.tres" id="1_53lcn"]
+[ext_resource type="Texture2D" uid="uid://bstsgadx7ego3" path="res://Resources/Sprites/wall__bottom_l.tres" id="2_iiws6"]
+[ext_resource type="Texture2D" uid="uid://du55wjt3mtnl" path="res://Resources/Sprites/wall_top_r.tres" id="3_no03u"]
+[ext_resource type="Texture2D" uid="uid://bloprr6sg3pw6" path="res://Resources/Sprites/wall_top_l.tres" id="4_xwgdj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j17mx"]
+size = Vector2(128, 128)
+
+[node name="PlatformSquare" type="Node2D"]
+
+[node name="SpriteCollection" type="Node2D" parent="."]
+
+[node name="WallR" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(32, 32)
+texture = ExtResource("1_53lcn")
+
+[node name="WallL" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(-32, 32)
+texture = ExtResource("2_iiws6")
+
+[node name="WallTopR" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(32, -32)
+texture = ExtResource("3_no03u")
+
+[node name="WallTopL" type="Sprite2D" parent="SpriteCollection"]
+position = Vector2(-32, -32)
+texture = ExtResource("4_xwgdj")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+shape = SubResource("RectangleShape2D_j17mx")

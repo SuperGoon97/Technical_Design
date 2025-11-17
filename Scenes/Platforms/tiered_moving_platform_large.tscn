@@ -1,0 +1,131 @@
+[gd_scene load_steps=11 format=3 uid="uid://bh6pwkxemqnne"]
+
+[ext_resource type="Script" uid="uid://etvc41bpqn66" path="res://Scripts/moving_platform_simple.gd" id="1_fhiqk"]
+[ext_resource type="Texture2D" uid="uid://b1ftrrpc6vpjr" path="res://Resources/Sprites/wall_bg_1.tres" id="2_e22qq"]
+[ext_resource type="Texture2D" uid="uid://b22qfor1jx7yu" path="res://Resources/Sprites/wall_bg_2.tres" id="3_b6fmc"]
+[ext_resource type="Texture2D" uid="uid://jqys1ukry63w" path="res://Resources/Sprites/wall_r.tres" id="4_bi4pi"]
+[ext_resource type="Texture2D" uid="uid://tp22boctuw0t" path="res://Resources/Sprites/wall_l.tres" id="5_dhkwn"]
+[ext_resource type="Texture2D" uid="uid://bstsgadx7ego3" path="res://Resources/Sprites/wall__bottom_l.tres" id="6_ng1ed"]
+[ext_resource type="Texture2D" uid="uid://d2p0ctjmn6clx" path="res://Resources/Sprites/wall__bottom_r.tres" id="7_7kg5q"]
+[ext_resource type="Texture2D" uid="uid://du55wjt3mtnl" path="res://Resources/Sprites/wall_top_r.tres" id="8_u0f4o"]
+[ext_resource type="Texture2D" uid="uid://bloprr6sg3pw6" path="res://Resources/Sprites/wall_top_l.tres" id="9_d2wrm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2d68l"]
+size = Vector2(128, 192)
+
+[node name="TieredMovingPlatformLarge" type="Node2D"]
+script = ExtResource("1_fhiqk")
+
+[node name="SpriteCollectionBackground" type="Node2D" parent="."]
+modulate = Color(0.5931336, 0.59313357, 0.59313357, 1)
+
+[node name="WallBg1" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(-32, 160)
+texture = ExtResource("2_e22qq")
+
+[node name="WallBg2" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(-32, 96)
+texture = ExtResource("2_e22qq")
+
+[node name="WallBg3" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(32, 160)
+texture = ExtResource("3_b6fmc")
+
+[node name="WallBg4" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(32, 96)
+texture = ExtResource("3_b6fmc")
+
+[node name="WallBg5" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(-32, 224)
+texture = ExtResource("2_e22qq")
+
+[node name="WallBg6" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(32, 224)
+texture = ExtResource("3_b6fmc")
+
+[node name="WallBg7" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(-32, 288)
+texture = ExtResource("2_e22qq")
+
+[node name="WallBg8" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(32, 288)
+texture = ExtResource("3_b6fmc")
+
+[node name="WallBg9" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(-32, 352)
+texture = ExtResource("2_e22qq")
+
+[node name="WallBg10" type="Sprite2D" parent="SpriteCollectionBackground"]
+position = Vector2(32, 352)
+texture = ExtResource("3_b6fmc")
+
+[node name="SpriteCollectionForground" type="Node2D" parent="."]
+
+[node name="Part1" type="Node2D" parent="SpriteCollectionForground"]
+
+[node name="WallR" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(32, 32)
+texture = ExtResource("4_bi4pi")
+
+[node name="WallL" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(-32, 32)
+texture = ExtResource("5_dhkwn")
+
+[node name="WallL2" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(-32, 96)
+texture = ExtResource("6_ng1ed")
+
+[node name="WallR2" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(32, 96)
+texture = ExtResource("7_7kg5q")
+
+[node name="WallTopR" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(32, -32)
+texture = ExtResource("8_u0f4o")
+
+[node name="WallTopL" type="Sprite2D" parent="SpriteCollectionForground/Part1"]
+position = Vector2(-32, -32)
+texture = ExtResource("9_d2wrm")
+
+[node name="Part2" type="Node2D" parent="SpriteCollectionForground"]
+position = Vector2(0, 384)
+
+[node name="WallR" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(32, 32)
+texture = ExtResource("4_bi4pi")
+
+[node name="WallL" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(-32, 32)
+texture = ExtResource("5_dhkwn")
+
+[node name="WallL2" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(-32, 96)
+texture = ExtResource("6_ng1ed")
+
+[node name="WallR2" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(32, 96)
+texture = ExtResource("7_7kg5q")
+
+[node name="WallTopR" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(32, -32)
+texture = ExtResource("8_u0f4o")
+
+[node name="WallTopL" type="Sprite2D" parent="SpriteCollectionForground/Part2"]
+position = Vector2(-32, -32)
+texture = ExtResource("9_d2wrm")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
+position = Vector2(0, 32)
+shape = SubResource("RectangleShape2D_2d68l")
+
+[node name="AnimatableBody2D2" type="AnimatableBody2D" parent="."]
+position = Vector2(0, 384)
+sync_to_physics = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D2"]
+position = Vector2(0, 32)
+shape = SubResource("RectangleShape2D_2d68l")
+metadata/_edit_lock_ = true

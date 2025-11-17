@@ -1,6 +1,7 @@
 extends Activatable
 
 @export var y_distance_to_move:float = 125.0
+@export var speed:float = 0.5
 @onready var default_position:Vector2 = global_position
 
 var door_tween:Tween
@@ -24,7 +25,7 @@ func do_tween(input:float):
 		if door_tween.is_running():
 			door_tween.kill()
 	door_tween = create_tween()
-	door_tween.tween_property(self,"global_position",Vector2(default_position.x,default_position.y + input),0.5)
+	door_tween.tween_property(self,"global_position",Vector2(default_position.x,default_position.y + input),speed)
 
 func close_door():
 	do_tween(0.0)

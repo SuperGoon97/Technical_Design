@@ -11,3 +11,7 @@ func _on_short_interaction(_instigator):
 	else:
 		$AnimatedSprite2D.play("On")
 		is_on = true
+
+
+func _on_interaction_long_interaction(_instigator: Node, _phase: Interaction.Phase, _delta: float) -> void:
+	pass # Replace with function body.
