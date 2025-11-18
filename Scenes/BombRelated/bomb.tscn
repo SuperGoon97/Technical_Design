@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://bdt2yrm6uqryp"]
+
+[ext_resource type="Script" uid="uid://b43t5vdc1yavu" path="res://Scripts/bomb.gd" id="1_3wup6"]
+[ext_resource type="Texture2D" uid="uid://du7urovag0crh" path="res://Resources/Sprites/bomb_1.tres" id="1_834au"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_3wup6"]
+radius = 26.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wn5b2"]
+radius = 128.0
+
+[node name="Bomb" type="RigidBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_3wup6")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(-4, -6)
+texture = ExtResource("1_834au")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("CircleShape2D_3wup6")
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_wn5b2")
+debug_color = Color(0.9069709, 0.2549947, 0.42437795, 0.41960785)
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

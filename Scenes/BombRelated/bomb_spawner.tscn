@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0s8f0xvk7flj"]
+
+[ext_resource type="Script" uid="uid://btjlifx6ro7eh" path="res://Scenes/BombRelated/bomb_spawner.gd" id="1_ns21e"]
+[ext_resource type="Texture2D" uid="uid://btnea5owsdukh" path="res://Resources/Sprites/bomb_launcher.tres" id="1_xtack"]
+
+[node name="BombSpawner" type="Node2D"]
+script = ExtResource("1_ns21e")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_xtack")
+
+[node name="BombSpawnPoint" type="Node2D" parent="."]
+position = Vector2(64, 0)
