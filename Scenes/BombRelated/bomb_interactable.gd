@@ -21,7 +21,7 @@ func _ready() -> void:
 var cum_hits:int = 0:
 	set(value):
 		cum_hits = value
-		if cum_hits >= hits_required:
+		if cum_hits == hits_required:
 			execute_activatables()
 
 func execute_activatables():

@@ -174,6 +174,7 @@ func make_global_bounds(g_pos:Vector2,bounds:PackedVector2Array) -> PackedVector
 	for vector in bounds:
 		var global_vec = Vector2(vector.x + g_pos.x,vector.y + g_pos.y)
 		return_packed_array.append(global_vec)
+	return_packed_array.append(g_pos)
 	return return_packed_array
 
 func get_closest_point_within_bounds(target:Node2D,action:CameraActionBounds) -> PackedVector2Array:

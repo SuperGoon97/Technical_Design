@@ -6,6 +6,7 @@ class_name OneWayPlatform extends Node2D
 var platform_speed:float = 10.0
 var platform_targets:Array[Node2D]
 var target:int = 0
+var enabled:bool = true
 var is_active:bool = true:
 	set(value):
 		is_active = value
@@ -14,7 +15,8 @@ var is_active:bool = true:
 		else:
 			target = 1
 func _physics_process(delta: float) -> void:
-	if platform_targets.is_empty(): 	return
+	if !enabled: return
+	if platform_targets.is_empty(): return
 	var direction = (platform_targets[target].position - position).normalized()
 	var distance = position.distance_to(platform_targets[target].position)
 	var velocity = direction * platform_speed * delta
@@ -51,3 +53,8 @@ func toggle_layer_collision(state:bool):
 	static_body_2d.set_collision_layer_value(1,state)
 	static_body_2d.set_collision_mask_value(1,state)
 	
+
+func set_enabled(state:bool):
+	enabled = state
+	visible = state
+	toggle_layer_collision(state)

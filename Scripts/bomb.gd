@@ -31,7 +31,6 @@ func interact_overlapping():
 	for area in overlapping_areas:
 		var parent_node:Node = area.get_parent()
 		if parent_node.has_method("on_hit_by_bomb"):
-			print("on hit by bomb invoked")
 			parent_node.on_hit_by_bomb()
 
 func _on_timer_timeout() -> void:
@@ -45,7 +44,6 @@ func start_tweens():
 	var color:Color
 	var vec:Vector2
 	while sum_flash_times < timer.wait_time:
-		print(i)
 		if i%2 > 0:
 			color = Color.RED
 			vec = Vector2(1.0+((i+1)*0.05),1.0+((i+1)*0.05))

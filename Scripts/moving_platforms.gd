@@ -1,19 +1,31 @@
-class_name MovingPlatforms extends Node2D
+class_name MovingPlatforms extends Activatable
 
 const ONE_WAY_PLATFORM = preload("res://Scenes/Platforms/one_way_platform.tscn")
 
 @export var number_of_platforms:int = 0
 @export var platform_speed:float = 1.0
+@export var start_active:bool = false
 
 @onready var point_marker_1: Sprite2D = $PointMarker1
 @onready var point_marker_2: Sprite2D = $PointMarker2
 
 var platform_array:Array[OneWayPlatform]
 
+func execute():
+	toggle_child_state(true)
+	pass
+
 func _ready() -> void:
 	create_platforms()
 	point_marker_1.hide()
 	point_marker_2.hide()
+	if !start_active:
+		toggle_child_state(false)
+
+func toggle_child_state(state:bool):
+	for platform in platform_array:
+		platform.set_enabled(state)
+	pass
 
 func create_platforms():
 	for n in number_of_platforms:

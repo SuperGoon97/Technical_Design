@@ -48,8 +48,6 @@ func _physics_process(delta: float) -> void:
 		has_jumped = false
 	if Input.is_action_just_pressed("ui_accept"):
 		G_Advanced_Cam.move_camera_on.emit()
-	if !player_can_move:
-		return
 
 	
 	_update_held_state(delta)
@@ -83,9 +81,10 @@ func _physics_process(delta: float) -> void:
 			G_Advanced_Cam.move_camera_on.emit()
 			interrupt_interaction()
 	if Input.is_action_just_pressed("ui_accept"):
-		if is_on_floor() or coyote_timer.time_left > 0:
-			velocity.y = JUMP_VELOCITY * jump_multiplier
-			has_jumped = true
+		if player_can_move:
+			if is_on_floor() or coyote_timer.time_left > 0:
+				velocity.y = JUMP_VELOCITY * jump_multiplier
+				has_jumped = true
 
 
 	# Get the input direction and handle the movement/deceleration.
@@ -93,16 +92,17 @@ func _physics_process(delta: float) -> void:
 	var direction:float = Input.get_axis("ui_left", "ui_right")
 	if _held_state == HoldState.HOLDING:
 		direction = 0
-	if direction != 0:
-		velocity.x = direction * SPEED
-		_sprite.play("walk")
-		_sprite.flip_h = direction < 0
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		if _held_state == HoldState.HOLDING:
-			_sprite.play("interact")
+	if player_can_move:
+		if direction != 0:
+			velocity.x = direction * SPEED
+			_sprite.play("walk")
+			_sprite.flip_h = direction < 0
 		else:
-			_sprite.play("idle")
+			velocity.x = move_toward(velocity.x, 0, SPEED)
+			if _held_state == HoldState.HOLDING:
+				_sprite.play("interact")
+			else:
+				_sprite.play("idle")
 	
 	if not is_on_floor():
 		_sprite.play("jump")

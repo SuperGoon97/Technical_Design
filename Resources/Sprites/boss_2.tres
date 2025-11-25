@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://chs1mcdxw6pj1"]
+
+[ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="1_086rc"]
+
+[resource]
+atlas = ExtResource("1_086rc")
+region = Rect2(832, 1024, 64, 64)

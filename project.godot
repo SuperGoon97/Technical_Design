@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 [autoload]
 
 G_Advanced_Cam="*res://addons/advanced_camera_plugin/core/scripts/global_advanced_camera.gd"
+signal_bus="*res://signal_bus.gd"
 
 [display]
 
@@ -30,6 +31,7 @@ enabled=PackedStringArray("res://addons/advanced_camera_plugin/plugin.cfg", "res
 [global_group]
 
 AdvancedCamera2D="AdvancedCamera2D node"
+LevelRoot=""
 
 [input]
 

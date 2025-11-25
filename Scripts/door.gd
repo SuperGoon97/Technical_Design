@@ -2,9 +2,15 @@ extends Activatable
 
 @export var y_distance_to_move:float = 125.0
 @export var speed:float = 0.5
+@export var locked:bool = false
 @onready var default_position:Vector2 = global_position
+@onready var lock: Sprite2D = $Lock
 
 var door_tween:Tween
+
+func _ready() -> void:
+	if locked:
+		lock.visible = true
 
 var door_open:bool = false:
 	set(value):
