@@ -1,7 +1,8 @@
-extends Activatable
+class_name BombInteractable extends Activatable
 
 const R_G_GRADIENT = preload("res://Scenes/BombRelated/r_g_gradient.tres")
 
+signal cum_hits_reached
 
 @export var is_active:bool = true:
 	set(value):
@@ -25,6 +26,7 @@ var cum_hits:int = 0:
 			execute_activatables()
 
 func execute_activatables():
+	cum_hits_reached.emit()
 	for activatable in activatables_array:
 		activatable.execute()
 

@@ -61,8 +61,11 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor():
 		match _held_state:
 			HoldState.SHORT_PRESS:
-				_interactor.attempt_short_interaction()
-				_resolve_highlight()
+				if held_grabable:
+					held_grabable._drop(self)
+				else:
+					_interactor.attempt_short_interaction()
+					_resolve_highlight()
 			HoldState.HOLDING:
 				if held_grabable:
 					held_grabable._drop(self)
@@ -115,7 +118,8 @@ func _physics_process(delta: float) -> void:
 
 func bind_held_grabable(grabable:Grabable):
 	if grabable == null: return
-	grabable.request_drop.connect(drop_grabable)
+	if !grabable.request_drop.is_connected(drop_grabable):
+		grabable.request_drop.connect(drop_grabable)
 
 func drop_grabable():
 	held_grabable._drop(self)

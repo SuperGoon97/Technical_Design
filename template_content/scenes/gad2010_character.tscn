@@ -157,5 +157,5 @@ shape = SubResource("RectangleShape2D_olskl")
 position = Vector2(0, -128)
 
 [node name="CoyoteTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.15
 one_shot = true

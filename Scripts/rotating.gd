@@ -22,7 +22,8 @@ func _ready() -> void:
 	return
 
 func execute_long(delta:float):
-	flip_flop_timer.start()
+	if flip_flop_timer:
+		flip_flop_timer.start()
 	if !flip_flop_roation:
 		rotate(deg_to_rad(1.0*rotation_speed*delta))
 	else:

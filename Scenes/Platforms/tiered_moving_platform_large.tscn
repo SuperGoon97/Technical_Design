@@ -18,6 +18,7 @@ script = ExtResource("1_fhiqk")
 
 [node name="SpriteCollectionBackground" type="Node2D" parent="."]
 modulate = Color(0.5931336, 0.59313357, 0.59313357, 1)
+z_index = -1
 
 [node name="WallBg1" type="Sprite2D" parent="SpriteCollectionBackground"]
 position = Vector2(-32, 160)
@@ -115,6 +116,8 @@ position = Vector2(-32, -32)
 texture = ExtResource("9_d2wrm")
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
@@ -123,6 +126,8 @@ shape = SubResource("RectangleShape2D_2d68l")
 
 [node name="AnimatableBody2D2" type="AnimatableBody2D" parent="."]
 position = Vector2(0, 384)
+collision_layer = 3
+collision_mask = 3
 sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D2"]

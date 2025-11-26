@@ -29,6 +29,8 @@ position = Vector2(-32, -32)
 texture = ExtResource("4_xwgdj")
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+collision_layer = 3
+collision_mask = 3
 sync_to_physics = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]

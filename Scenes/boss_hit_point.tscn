@@ -1,0 +1,90 @@
+[gd_scene load_steps=10 format=3 uid="uid://ddgduu6c4aixc"]
+
+[ext_resource type="Script" uid="uid://di4ce1xl82h1w" path="res://Scenes/boss_hit_point.gd" id="1_nyqy8"]
+[ext_resource type="Texture2D" uid="uid://chs1mcdxw6pj1" path="res://Resources/Sprites/boss_2.tres" id="1_r66lw"]
+[ext_resource type="Texture2D" uid="uid://ctign76phh26x" path="res://Resources/Sprites/boss_3.tres" id="2_nyqy8"]
+[ext_resource type="PackedScene" uid="uid://bkyu1tg4cpgl2" path="res://Scenes/BombRelated/bomb_interactable.tscn" id="3_xrpqp"]
+[ext_resource type="Script" uid="uid://c3qay5ywbvtfi" path="res://template_content/scripts/banisher.gd" id="4_xrpqp"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_on3du"]
+radius = 64.0
+height = 384.0
+
+[sub_resource type="Animation" id="Animation_on3du"]
+resource_name = "appear_animation"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 192), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_nyqy8"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Node2D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 192)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4ivs0"]
+_data = {
+&"RESET": SubResource("Animation_nyqy8"),
+&"appear_animation": SubResource("Animation_on3du")
+}
+
+[node name="BossHitPoint" type="Node2D"]
+script = ExtResource("1_nyqy8")
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(0, 192)
+
+[node name="SpriteHolder" type="Node2D" parent="Node2D"]
+metadata/_edit_lock_ = true
+
+[node name="Boss2" type="Sprite2D" parent="Node2D/SpriteHolder"]
+position = Vector2(0, 64)
+texture = ExtResource("1_r66lw")
+metadata/_edit_lock_ = true
+
+[node name="Boss3" type="Sprite2D" parent="Node2D/SpriteHolder"]
+texture = ExtResource("1_r66lw")
+metadata/_edit_lock_ = true
+
+[node name="Boss4" type="Sprite2D" parent="Node2D/SpriteHolder"]
+position = Vector2(0, -64)
+texture = ExtResource("2_nyqy8")
+metadata/_edit_lock_ = true
+
+[node name="Area2D" type="Area2D" parent="Node2D/SpriteHolder"]
+position = Vector2(0, -64)
+scale = Vector2(0.5, 0.5)
+script = ExtResource("4_xrpqp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/SpriteHolder/Area2D"]
+position = Vector2(0, 128)
+shape = SubResource("CapsuleShape2D_on3du")
+
+[node name="BombInteractable" parent="Node2D" instance=ExtResource("3_xrpqp")]
+metadata/_edit_lock_ = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Node2D"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_4ivs0")
+}
+
+[connection signal="cum_hits_reached" from="Node2D/BombInteractable" to="." method="_on_bomb_interactable_cum_hits_reached"]
