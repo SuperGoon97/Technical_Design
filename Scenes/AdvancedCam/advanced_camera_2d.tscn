@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://drxgbbvowyje4"]
+[gd_scene load_steps=5 format=3 uid="uid://drxgbbvowyje4"]
 
 [ext_resource type="Script" uid="uid://crdiiqs5w1g4l" path="res://addons/advanced_camera_plugin/core/scripts/advanced_camera_2d.gd" id="1_cbslc"]
 [ext_resource type="PackedScene" uid="uid://d0a6hn2egbpu4" path="res://Scenes/Utility/fps_counter.tscn" id="2_4kbav"]
+[ext_resource type="Script" uid="uid://ci00qjy5qusks" path="res://Scripts/text_edit.gd" id="3_wsy3c"]
+[ext_resource type="Script" uid="uid://bscnll0v5mvvn" path="res://Scripts/fade_screen.gd" id="4_sd5m7"]
 
 [node name="AdvancedCamera2D" type="Camera2D" groups=["AdvancedCamera2D"]]
 script = ExtResource("1_cbslc")
@@ -27,3 +29,41 @@ theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 4
 metadata/_edit_use_anchors_ = true
+
+[node name="TextEdit" type="TextEdit" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_top = 24.0
+offset_right = 208.0
+offset_bottom = 64.0
+placeholder_text = "ArbitraryStringCommand"
+script = ExtResource("3_wsy3c")
+
+[node name="Button" type="Button" parent="CanvasLayer/Control/TextEdit"]
+layout_mode = 0
+offset_left = 168.0
+offset_right = 208.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.796243, 0.796243, 0.796243, 0)
+script = ExtResource("4_sd5m7")
+
+[node name="Label" type="Label" parent="CanvasLayer/ColorRect"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 64
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1

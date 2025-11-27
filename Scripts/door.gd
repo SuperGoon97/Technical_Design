@@ -21,6 +21,11 @@ var door_open:bool = false:
 		door_open = value
 
 func execute():
+	if locked:
+		await get_tree().create_timer(0.25).timeout
+		lock.visible = false
+		locked = false
+		await get_tree().create_timer(0.25).timeout
 	door_open = !door_open
 
 func open_door():

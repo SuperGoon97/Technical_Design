@@ -41,6 +41,5 @@ func create_platforms():
 func get_position_between_markers(itterator:int) -> Vector2:
 	var ret_pos:Vector2
 	var a:float  = (itterator + 1.0)/number_of_platforms
-	print(a)
 	ret_pos = lerp(point_marker_2.position,point_marker_1.position,a)
 	return ret_pos

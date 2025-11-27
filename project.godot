@@ -17,7 +17,8 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 [autoload]
 
 G_Advanced_Cam="*res://addons/advanced_camera_plugin/core/scripts/global_advanced_camera.gd"
-signal_bus="*res://signal_bus.gd"
+signal_bus="*res://Globals/signal_bus.gd"
+debug="*res://Globals/debug.gd"
 
 [display]
 

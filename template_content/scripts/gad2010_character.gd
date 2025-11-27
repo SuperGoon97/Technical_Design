@@ -172,7 +172,7 @@ func banish() -> void:
 	if _checkpoint == null:
 		get_tree().call_deferred("change_scene_to_file", HUB_SCENE_PATH)
 	else:
-		position = _checkpoint.position
+		global_position = _checkpoint.global_position
 
 func set_checkpoint(node:Node2D) -> void:
 	_checkpoint = node

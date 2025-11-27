@@ -11,6 +11,7 @@ extends Node2D
 func _ready() -> void:
 	bomb_interactable.hits_required = hits_required
 	signal_bus.event.connect(event_switch)
+	signal_bus.debug_event.connect(event_switch)
 
 
 func event_switch(string:String):

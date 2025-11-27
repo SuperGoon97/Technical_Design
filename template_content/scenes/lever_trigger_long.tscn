@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://eaybu83nqnol"]
+[gd_scene load_steps=10 format=3 uid="uid://eaybu83nqnol"]
 
 [ext_resource type="Script" uid="uid://cyqvk40rpucx6" path="res://template_content/scripts/lever_trigger_long.gd" id="1_2p34l"]
 [ext_resource type="Texture2D" uid="uid://bdosdb1qiq15g" path="res://template_content/sprites/spritesheet-tiles-default.png" id="2_2p34l"]
 [ext_resource type="Texture2D" uid="uid://d4j8rt1dottwq" path="res://Resources/Sprites/lever_long.tres" id="2_4rocu"]
 [ext_resource type="Script" uid="uid://d182ka7jx8rbo" path="res://addons/gad2010interaction/core/interaction.gd" id="3_4rocu"]
+[ext_resource type="Texture2D" uid="uid://mvahnh747cl3" path="res://Resources/Sprites/lever_long_sprite.png" id="4_4rocu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_37n2b"]
 size = Vector2(64, 64)
@@ -30,6 +31,9 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_4rocu")
+}, {
 "duration": 1.0,
 "texture": ExtResource("2_4rocu")
 }, {

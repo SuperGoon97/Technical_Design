@@ -149,8 +149,6 @@ func _lag_to_target(delta:float ,speed_modifier:float = 100.0):
 		elif _check_position_within_y_bounds(Vector2(global_position.x,global_position.y+((direction.y * speed_modifier * rubber_banding) * delta))):
 			#print("camera oob next y is closer")
 			global_position.y += (direction.y * speed_modifier * rubber_banding) * delta
-
-
 	else:
 		global_position += (direction * speed_modifier * rubber_banding) * delta
 	if camera_target_changed:
@@ -195,6 +193,7 @@ func _kill_tween():
 		if current_tween.is_running():
 			current_tween.kill()
 
+## Changes state of camera_can_move_to_target
 func camera_can_move_to_target_state(state:bool):
 	can_move_to_target = state
 

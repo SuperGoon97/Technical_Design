@@ -10,5 +10,5 @@ func on_area_entered(area:Area2D):
 	if !can_execute: return
 	if area.get_parent() is GAD2010Character:
 		signal_bus.event.emit(event_string_to_emit)
-	if do_once:
-		can_execute = false
+		if do_once:
+			can_execute = false
